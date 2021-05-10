@@ -1,0 +1,86 @@
+<div class="main">
+  <div class="container">
+      <div class="middle">
+        <div id="login">
+          <form [formGroup]="loginForm">
+            <fieldset class="clearfix">
+              <p>
+                <span class="fa fa-user"></span>
+                <input
+                  type="email"
+                  formControlName="email"
+                  placeholder="Nombre de usuario o email"
+                />
+                <small
+                  *ngIf="
+                    loginForm.controls.email.hasError('required') &&
+                    loginForm.controls.email.dirty
+                  "
+                  class="error-text"
+                >
+                  Debes ingresar tu email.
+                </small>
+              </p>
+              <!-- JS because of IE support; better: placeholder="Username" -->
+              <p>
+                <span class="fa fa-lock"></span>
+                <input
+                  type="password"
+                  formControlName="password"
+                  placeholder="Contraseña"
+                />
+                <small
+                  *ngIf="
+                    loginForm.controls.password.hasError('required') &&
+                    loginForm.controls.password.dirty
+                  "
+                  class="error-text"
+                >
+                  Debes ingresar tu contraseña.
+                </small>
+              </p>
+              <!-- JS because of IE support; better: placeholder="Password" -->
+
+              <div class="form-check">
+                <label class="form-check-label text-muted">
+                  <input
+                    type="checkbox"
+                    formControlName="remember"
+                  >
+                  Recordarme
+                </label>
+              </div>
+
+              <div>
+                <span style="width: 48%; text-align: left; display: inline-block">
+                  <a class="small-text" href="#">¿Olvidaste tu contraseña?</a>
+                </span>
+                <span
+                  style="width: 50%; text-align: right; display: inline-block"
+                >
+                  <input
+                    [disabled]="loginForm.invalid"
+                    type="submit"
+                    value="Ingresar"
+                    (click)="login()"
+                  >
+                </span>
+              </div>
+            </fieldset>
+            <div class="clearfix"></div>
+          </form>
+
+          <div class="clearfix"></div>
+        </div>
+        <!-- end login -->
+        <div class="logo">
+          mabc
+
+          <div class="clearfix"></div>
+        </div>
+      </div>
+  </div>
+
+  <app-toasts></app-toasts>
+
+</div>

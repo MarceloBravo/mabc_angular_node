@@ -1,0 +1,19 @@
+.spinner-containner{
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  opacity: .5;
+  background: black;
+}
+
+.spinner-border {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  z-index: 10000;
+  width: 4rem;
+  height: 4rem;
+}

@@ -1,0 +1,7 @@
+.trigger-modal{
+  display: none;
+}
+
+.modal-dialog{
+  z-index: 10000;
+}

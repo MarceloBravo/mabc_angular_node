@@ -1,0 +1,20 @@
+.col-fecha{
+  width: 140px;
+}
+
+.col-acciones{
+  width: 90px;
+}
+
+a{
+  color: dimgrey !important;
+  padding-right: 10px;
+}
+
+.btn{
+  color: white !important;
+}
+
+.btn-nuevo{
+  float: right;
+}

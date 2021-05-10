@@ -1,0 +1,16 @@
+<nav id="sidebar" class="sidebar">
+  <div class="sidebar-content js-simplebar">
+    <a class="sidebar-brand" href="index.html">
+      <span class="align-middle">AdminKit</span>
+    </a>
+
+    <ul class="sidebar-nav">
+      <ng-container *ngFor="let mnu of menus">
+        <app-sub-menu
+          [className]="'sidebar-header'"
+          [menu]="mnu"
+        ></app-sub-menu>
+      </ng-container>
+    </ul>
+  </div>
+</nav>

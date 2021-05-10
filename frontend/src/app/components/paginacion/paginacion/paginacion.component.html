@@ -1,0 +1,30 @@
+<div class="form-group row">
+  <div class="col-md-6">
+    <nav aria-label="...">
+      <ul class="pagination" *ngIf="paginacion.totPaginas > 1">
+        <li class="page-item" *ngIf="paginacion.pagina > 0">
+          <button class="page-link" (click)="anterior()" tabindex="-1">Anterior</button>
+        </li>
+
+        <ng-container *ngFor="let pag of paginacion.arrPaginas">
+          <li class="page-item" *ngIf="(pag-1) !== paginacion.pagina">
+            <a class="page-link" (click)="irA(pag-1)" >{{ pag }}</a>
+          </li>
+          <li class="page-item active" *ngIf="(pag-1) === paginacion.pagina">
+            <a class="page-link" (click)="irA(pag-1)" >{{ pag }}
+                <span class="sr-only">(current)</span>
+            </a>
+          </li>
+        </ng-container>
+
+        <li class="page-item">
+          <a class="page-link" (click)="siguiente()" *ngIf="paginacion.pagina < paginacion.totPaginas-1">Siguiente</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="col-md-2"></div>
+  <div class="col-md-4 pages-info">
+    <label class="lbl-paginas">Página {{ paginacion.pagina + 1  }} de {{ paginacion.totPaginas }}</label>
+  </div>
+</div>

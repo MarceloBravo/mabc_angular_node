@@ -1,0 +1,196 @@
+<div class="row">
+  <app-spinner [mostrarSpinner]="showSpinner"></app-spinner>
+
+  <app-toasts></app-toasts>
+
+  <app-modal-dialog
+    [titulo]="'Grabar'"
+    [mensaje]="messageDialog"
+    [mostrar]="mostrarModal"
+    (cerrar)="cancelarModal($event)"
+    (aceptar)="aceptarModal($event)"
+  >
+  </app-modal-dialog>
+
+  <h1 class="h3 mb-3">Menús</h1>
+
+  <div class="row">
+    <div class="col-12 col-xl-12">
+      <div class="card">
+        <div class="card-header">
+          <!-- <h6 class="card-subtitle text-muted">{{ url }}</h6> -->
+          <h5 class="card-title">Mantenedor de Menús</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form">
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label">Nombre</label>
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  formControlName="nombre"
+                  class="form-control col-md-5"
+                  placeholder="Ingresa el nombre del menú"
+                  max="50"
+                />
+                <!-- Mensajes de error -->
+                <div
+                  *ngIf="
+                    form.get('nombre')?.hasError('required') &&
+                    form.get('nombre')?.dirty
+                  "
+                  class="error-input"
+                >
+                  El nombre del menú es obligatorio.
+                </div>
+                <div
+                  *ngIf="
+                    form.get('nombre')?.hasError('minlength') &&
+                    form.get('nombre')?.dirty
+                  "
+                  class="error-input"
+                >
+                  El nombre del menú debe tener almenos 5 carácteres. Ingresa un
+                  nombre más largo.
+                </div>
+                <div
+                  *ngIf="
+                    form.get('nombre')?.hasError('maxlength') &&
+                    form.get('nombre')?.dirty
+                  "
+                  class="error-input"
+                >
+                  El nombre del menú debe tener un máximo de 50 carácteres.
+                  Ingresa un nombre más corto.
+                </div>
+                <!-- /Mensajes de error -->
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label">URL</label>
+              <div class="col-sm-10">
+                <input
+                  type="text"
+                  formControlName="url"
+                  class="form-control col-md-10"
+                  placeholder="Ingresa la url asociada al menú"
+                  max="200"
+                />
+                <!-- Mensajes de error -->
+                <div
+                  *ngIf="
+                    form.get('url')?.hasError('required') &&
+                    form.get('url')?.dirty
+                  "
+                  class="error-input"
+                >
+                  La url del menú es obligatoria.
+                </div>
+                <div
+                  *ngIf="
+                    form.get('url')?.hasError('minlength') &&
+                    form.get('url')?.dirty
+                  "
+                  class="error-input"
+                >
+                  La url del menú debe tener almenos 3 carácteres. Ingresa una
+                  url más larga.
+                </div>
+                <div
+                  *ngIf="
+                    form.get('url')?.hasError('maxlength') &&
+                    form.get('url')?.dirty
+                  "
+                  class="error-input"
+                >
+                  La url del menú debe tener un máximo de 200 carácteres.
+                  Ingresa una url más corta.
+                </div>
+                <!-- /Mensajes de error -->
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label">Menú padre</label>
+              <div class="col-sm-10">
+                <select
+                  formControlName="menu_padre_id"
+                  class="custom-select col-md-10"
+                >
+                  <option value="0">Sin menú padre</option>
+                  <option *ngFor="let item of menusPadre" [value]="item.id">
+                    {{ item.nombre }}
+                  </option>
+                </select>
+                <!-- Mensajes de error -->
+                <div
+                  *ngIf="
+                    form.get('menu_padre_id')?.hasError('menuPadreError') &&
+                    form.get('menu_padre_id')?.dirty
+                  "
+                  class="error-input"
+                >
+                  El menú padre debe ser diferente al menú actual.
+                </div>
+                <!-- /Mensajes de error -->
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label">Posición</label>
+              <div class="col-sm-10">
+                <input
+                  type="number"
+                  formControlName="posicion"
+                  class="form-control col-md-2"
+                  min="0"
+                />
+                <!-- Mensajes de error -->
+                <div
+                  *ngIf="
+                    form.get('posicion')?.hasError('required') &&
+                    form.get('posicion')?.dirty
+                  "
+                  class="error-input"
+                >
+                  Debe ingresar la posición del menú.
+                </div>
+                <div
+                  *ngIf="
+                    form.get('posicion')?.hasError('min') &&
+                    form.get('posicion')?.dirty
+                  "
+                  class="error-input"
+                >
+                  La posición del menú debe ser un número positivo.
+                </div>
+                <!-- /Mensajes de error -->
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" (click)="cancelar()">
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-danger"
+              (click)="modalEliminar()"
+              [disabled]="id == null"
+            >
+              Eliminar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success"
+              (click)="modalGrabar()"
+              [disabled]="form.invalid"
+            >
+              Grabar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

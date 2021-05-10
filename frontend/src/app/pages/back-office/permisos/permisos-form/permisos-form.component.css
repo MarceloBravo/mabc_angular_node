@@ -1,0 +1,29 @@
+button{
+  margin-right: 10px;
+  float: right;
+}
+
+
+.error-input{
+  color: red;
+}
+
+.headers-permisos label{
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.permisos{
+  text-align: center;
+}
+
+.permisos label{
+  text-align: left;
+}
+
+@media only screen and (max-width: 767px) {
+  .heders-rigth{
+    display: none
+  }
+
+}

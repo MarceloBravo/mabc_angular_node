@@ -1,0 +1,15 @@
+<div class="toasts">
+    <app-toast *ngFor="let toast of toastService.toasts"
+      [header]="toast.header"
+      [class]="toast.classname"
+      [autohide]="toast.autohide"
+      [delay]="toast.delay || 5000"
+      [message]="toast.message"
+      [typeOfMessage]="toast.typeOfMessage"
+      [id]="toast.id"
+      (hideToast)="closeToast(toast)"
+    >
+
+  </app-toast>
+
+</div>

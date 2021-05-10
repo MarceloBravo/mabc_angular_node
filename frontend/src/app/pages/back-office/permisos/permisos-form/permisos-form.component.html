@@ -1,0 +1,121 @@
+<div class="row">
+  <app-spinner [mostrarSpinner]="showSpinner"></app-spinner>
+
+  <app-toasts></app-toasts>
+
+  <app-modal-dialog
+    [titulo]="'Grabar'"
+    [mensaje]="messageDialog"
+    [mostrar]="mostrarModal"
+    (cerrar)="cancelarModal($event)"
+    (aceptar)="aceptarModal($event)"
+  >
+  </app-modal-dialog>
+
+  <h1 class="h3 mb-3">Permisos</h1>
+
+  <div class="row">
+    <div class="col-12 col-xl-12">
+      <div class="card">
+        <div class="card-header">
+          <!-- <h6 class="card-subtitle text-muted">{{ url }}</h6> -->
+          <h5 class="card-title">Mantenedor de Permisos</h5>
+        </div>
+        <div class="card-body">
+          <form #form="ngForm">
+            <div class="form-group row">
+              <label class="col-sm-2 col-form-label">Rol:</label>
+              <div class="col-sm-10">
+                <select
+                  class="custom-select col-md-5"
+                  #cboRoles
+                  (change)="buscar(cboRoles)"
+                >
+                  <option *ngIf="roles.length > 0" value="" disabled selected>
+                    -- Seleccione --
+                  </option>
+                  <option *ngIf="roles.length === 0" value="" disabled selected>
+                    -- No existen roles que mostrar --
+                  </option>
+                  <option *ngFor="let item of roles" [value]="item.id">
+                    {{ item.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row headers-permisos">
+              <diV class="col-md-6">
+                <label class="col-sm-4 col-form-label">Pantalla</label>
+                <label class="col-sm-2 col-form-label">Acceder</label>
+                <label class="col-sm-2 col-form-label">Crear</label>
+                <label class="col-sm-2 col-form-label">Modificar</label>
+                <label class="col-sm-2 col-form-label">Eliminar</label>
+              </diV>
+
+              <diV class="col-md-6 heders-rigth">
+                <label class="col-sm-4 col-form-label">Pantalla</label>
+                <label class="col-sm-2 col-form-label">Acceder</label>
+                <label class="col-sm-2 col-form-label">Crear</label>
+                <label class="col-sm-2 col-form-label">Modificar</label>
+                <label class="col-sm-2 col-form-label">Eliminar</label>
+              </diV>
+            </div>
+
+            <div class="row">
+              <div
+                *ngFor="let item of permisos; let i = index"
+                class="row col-md-6 permisos"
+              >
+                <div class="col-sm-4">
+                  <label class="col-sm-9 col-form-label">{{
+                    item.pantalla
+                  }}</label>
+                </div>
+                <div class="col-sm-2">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="item.acceder"
+                    name="acceder-{{ item.pantallas_id }}"
+                  />
+                </div>
+                <div class="col-sm-2">
+                  <input
+                    *ngIf="item.permite_crear"
+                    type="checkbox"
+                    [(ngModel)]="item.crear"
+                    name="crear-{{ item.pantallas_id }}"
+                  />
+                </div>
+                <div class="col-sm-2">
+                  <input
+                    *ngIf="item.permite_modificar"
+                    type="checkbox"
+                    [(ngModel)]="item.modificar"
+                    name="modificar-{{ item.pantallas_id }}"
+                  />
+                </div>
+                <div class="col-sm-2">
+                  <input
+                    *ngIf="item.permite_eliminar"
+                    type="checkbox"
+                    [(ngModel)]="item.eliminar"
+                    name="eliminar-{{ item.pantallas_id }}"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-success"
+              (click)="modalGrabar()"
+            >
+              Grabar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

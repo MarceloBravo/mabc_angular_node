@@ -1,0 +1,11 @@
+.container-fluid {
+  width: inherit !important;
+}
+
+.main-menu{
+  height: calc(133% - 80px) !important;
+}
+
+app-main-menu{
+  display: contents;
+}

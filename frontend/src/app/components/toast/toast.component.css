@@ -1,0 +1,58 @@
+.toast{
+  opacity: 1 !important;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  border-color: #f0f8ff00;
+  min-width: 300px;
+}
+
+.toastComponent{
+  padding-bottom: 10px !important;
+}
+
+.mr-auto{
+  color: #841212;
+}
+
+.rounded{
+  width: 21px;
+}
+
+.bg-success > .toast{
+  background: green !important;
+}
+
+.bg-success > .toast-header > .mr-auto {
+  color: #466910 !important;
+}
+
+.bg-warning > div{
+  background: #efd704!important;
+}
+
+.bg-warning > .toast-header{
+  background: #f2f3e3 !important;
+}
+
+.bg-warning > .toast-header > .mr-auto{
+  color: #808262;
+}
+
+.bg-warning > .toast-body{
+  color: #67612c;
+}
+
+
+.bg-danger > div{
+  background: #ef041b!important;
+}
+
+.bg-danger > .toast-header{
+  background: #f5a7af!important;
+}
+
+.bg-danger > .toast-header > .mr-auto{
+  color: #af0717;
+}
+

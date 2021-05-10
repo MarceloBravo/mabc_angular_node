@@ -1,0 +1,13 @@
+<li [ngClass]="className">
+  <a *ngIf="menu?.url" class="sidebar-link" routerLink="{{ menu?.url }}">
+    <i class="align-middle" data-feather="settings"></i>
+    <span class="align-middle">{{ menu?.nombre }}</span>
+  </a>
+  <label *ngIf="!menu?.url">{{ menu?.nombre }}</label>
+  <ul *ngIf="menu?.sub_menu">
+    <app-sub-menu
+      *ngFor="let mnu of menu?.sub_menu"
+      [menu]="mnu"
+    ></app-sub-menu>
+  </ul>
+</li>

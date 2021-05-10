@@ -1,0 +1,44 @@
+<div class="container-fluid p-0">
+
+  <app-spinner [mostrarSpinner]="showSpinner"></app-spinner>
+
+  <app-toasts></app-toasts>
+
+  <app-modal-dialog
+    [titulo]="'Eliminar'"
+    [mensaje]="'¿Desea eliminar el registro?'"
+    [mostrar]="mostrarModalEliminar"
+    [textoBtnAceptar]="'Eliminar'"
+    (cerrar)="cancelarEliminar($event)"
+    (aceptar)="aceptarEliminar($event)"
+    >
+  </app-modal-dialog>
+
+  <h1 class="h3 mb-3">Menús</h1>
+
+  <div class="row">
+
+    <div class="col-12 col-xl-12">
+
+      <app-grid
+        [titulo]="'Listado de menús'"
+        [cabeceras]="headers"
+        [registros]="menus"
+        [columnasVisibles]="visibleColumns"
+        (idEliminar)="eliminar($event)"
+        (textoFiltro)="filtrar($event)"
+      >
+      </app-grid>
+
+      <app-paginacion
+        [paginacion]="paginacion"
+        [rutaGet]="'/api/menus/pag/'"
+        (paginaAnterior)="mostrarPagina($event)"
+        (paginaSiguiente)="mostrarPagina($event)"
+        (mostrarPagina)="mostrarPagina($event)"
+      ></app-paginacion>
+
+    </div>
+  </div>
+
+</div>
