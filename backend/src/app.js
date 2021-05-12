@@ -16,6 +16,7 @@ app.use(bodyParser.json()); //Permite recibir y entender los datos recibidos com
 //Definiendo rutas
 require('./routes/loginRoutes')(app, null);
 require('./routes/userRoutes')(app, null);
+require('./routes/menusRoutes')(app, null);
 
 app.listen(app.get('port'), () => {
     console.log('Servidor activo en el puerto 3000')

@@ -44,8 +44,8 @@ export class MainMenuComponent implements OnInit {
     this._menusService.getMenus(1).subscribe(
       (res: any)=>{
         this.menus = res;
-        this.menus = this.menus.sort((a: any, b: any) => (a.menu_padre_id - b.menu_padre_id)).sort((a: any, b: any) => (a.posicion - b.posicion))
-        console.log('menus',res);
+        //this.menus = this.menus.sort((a: any, b: any) => (a.menu_padre_id - b.menu_padre_id)).sort((a: any, b: any) => (a.posicion - b.posicion))
+        //console.log('menus',res);
       },error=>{
         console.log(error);
       }
