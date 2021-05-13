@@ -171,6 +171,7 @@ export class MenusFormComponent implements OnInit {
   }
 
   private eliminar(){
+    this.cancelarModal(null);
     this.showSpinner = true;
     this._menusService.delete(this.id).subscribe(
       (res: any)=>{

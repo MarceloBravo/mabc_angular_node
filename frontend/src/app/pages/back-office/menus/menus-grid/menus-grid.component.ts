@@ -32,9 +32,9 @@ export class MenusGridComponent implements OnInit {
 
   private obtenerDatos(){
     this.showSpinner = true;
+    console.log('Página',this.paginacion.pagina)
     this._menusService.list(this.paginacion.pagina).subscribe(
       (res: any)=>{
-        console.log(res);
         if(res['status'] === 'Token is Expired'){
           this.router.navigate(['/']);
         }else{

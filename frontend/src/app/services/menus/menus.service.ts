@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Rol } from '../../class/rol/rol';
-import { SharedService } from '../shared/shared.service';
 import { ConstantesService } from '../constantes/constantes.service';
+import { Menu } from '../../class/menus/menu';
 
 @Injectable({
   providedIn: 'root'
@@ -28,12 +27,12 @@ export class MenusService {
     return this.http.get(`${this.constantes.endPoint}${this.url}/${id}`,{headers: this.constantes.header()});
   }
 
-  insert(rol: Rol){
-    return this.http.post(`${this.constantes.endPoint}${this.url}`, rol,{headers: this.constantes.header()});
+  insert(menu: Menu){
+    return this.http.post(`${this.constantes.endPoint}${this.url}`, menu,{headers: this.constantes.header()});
   }
 
-  update(id: number, rol: Rol){
-    return this.http.put(`${this.constantes.endPoint}${this.url}/${id}`, rol,{headers: this.constantes.header()});
+  update(id: number, menu: Menu){
+    return this.http.put(`${this.constantes.endPoint}${this.url}/${id}`, menu,{headers: this.constantes.header()});
   }
 
   delete(id: number){
