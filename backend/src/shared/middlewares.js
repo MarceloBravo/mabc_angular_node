@@ -1,15 +1,13 @@
-const secret = require('../shared/constants');
+const constantes = require('../shared/constants');
 const jwt = require('jsonwebtoken');
 
-let middlewares = {}
-
-middlewares.checkToken = async (req, res, next) => {
+module.exports = checkToken = async (req, res, next) => {
     try{
         const bearerHeader = req.headers['authorization'];
         if(bearerHeader){
             let token = bearerHeader.split(" ")[1];
             req.token = token;
-            let verified = jwt.verify(token, secret)
+            let verified = jwt.verify(token, constantes.secret)
             if(verified){
                 next();
             }else{
@@ -22,5 +20,3 @@ middlewares.checkToken = async (req, res, next) => {
         res.status(400).send('Token no válido');
     }
 }
-
-module.exports = middlewares

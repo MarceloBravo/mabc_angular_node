@@ -17,7 +17,7 @@ export class PantallasGridComponent implements OnInit {
   public visibleColumns: string[] = ['nombre','menu','url','created_at','updated_at'];
   public data: Pantalla[] = [];
   public paginacion: Paginacion  = new Paginacion();
-
+  private idEliminar: any = null;
 
   constructor(
     private _pantallasServices: PantallasService,
@@ -58,11 +58,13 @@ export class PantallasGridComponent implements OnInit {
 
   cancelarEliminar(e: any){
     this.mostrarModalEliminar = false;
+    this.idEliminar = null;
   }
 
   aceptarEliminar(e: any){
     this.showSpinner = true;
-    this._pantallasServices.delete(e).subscribe(
+    this.mostrarModalEliminar = false;
+    this._pantallasServices.delete(this.idEliminar).subscribe(
       (res: any) => {
         if(res.tipoMensaje === 'success'){
           this._toast.showSuccessMessage(res.mensaje)
@@ -76,19 +78,24 @@ export class PantallasGridComponent implements OnInit {
     )
   }
 
-  eliminar(){
+  eliminar(id: any){
+    this.idEliminar = id;
     this.mostrarModalEliminar = true;
   }
 
   filtrar(texto: string){
-    this.paginacion.pagina = 0;
-    this._pantallasServices.filter(texto, this.paginacion.pagina).subscribe(
-      (res: any)=> {
-        this.cargarDatos(res);
-      },error=>{
-        this.handlerError(error);
-      }
-    )
+    if(texto === ''){
+      this.obtenerDatos();
+    }else{
+      this.paginacion.pagina = 0;
+      this._pantallasServices.filter(texto, this.paginacion.pagina).subscribe(
+        (res: any)=> {
+          this.cargarDatos(res);
+        },error=>{
+          this.handlerError(error);
+        }
+      )
+    }
   }
 
   mostrarPagina(pagina: number){

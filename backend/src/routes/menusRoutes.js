@@ -1,8 +1,8 @@
 const menusModel = require('../models/menus');
-const mw = require('../shared/middlewares.js');
+const checkToken = require('../shared/middlewares.js');
 
 module.exports = function(app, passport){
-    app.get('/menus/rol/:idRol', mw.checkToken, (req, res) => {
+    app.get('/menus/rol/:idRol', checkToken, (req, res) => {
         menusModel.mainMenu(req.params.idRol,(err, data) => {
             if(err){
                 res.json(err);
@@ -12,7 +12,7 @@ module.exports = function(app, passport){
         });
     });
 
-    app.get('/menus/pag/:pag', mw.checkToken, (req, res) => {
+    app.get('/menus/pag/:pag', checkToken, (req, res) => {
         menusModel.getPage(req.params.pag,(err, data) => {
             if(err){
                 res.json(err);
@@ -22,7 +22,7 @@ module.exports = function(app, passport){
         });
     });
 
-    app.get('/menus/filtrar/:texto/:pag', mw.checkToken, (req, res) => {
+    app.get('/menus/filtrar/:texto/:pag', checkToken, (req, res) => {
         menusModel.filter(req.params.texto, req.params.pag, (err, data) => {
             if(err){
                 res.json(err);
@@ -32,7 +32,7 @@ module.exports = function(app, passport){
         });
     });
 
-    app.get('/menus/:id', mw.checkToken, (req, res) => {
+    app.get('/menus/:id', checkToken, (req, res) => {
         menusModel.get(req.params.id, (err, data) => {
             if(err){
                 res.json(data);
@@ -43,7 +43,7 @@ module.exports = function(app, passport){
 
     });
 
-    app.get('/menus/get/all', mw.checkToken, (req, res) => {
+    app.get('/menus/get/all', checkToken, (req, res) => {
         menusModel.getAll((err, data) => {
             if(err){
                 res.json(data);
@@ -54,7 +54,7 @@ module.exports = function(app, passport){
 
     });
 
-    app.post('/menus', mw.checkToken, (req,res) => {
+    app.post('/menus', checkToken, (req,res) => {
         menusModel.insert(req.body,(err, data) => {
             if(err){
                 res.json(err);
@@ -64,7 +64,7 @@ module.exports = function(app, passport){
         });
     });
 
-    app.put('/menus/:id', mw.checkToken, (req,res) => {
+    app.put('/menus/:id', checkToken, (req,res) => {
         let id = req.params.id;
         menusModel.update(id, req.body,(err, data) => {
             if(err){
@@ -76,7 +76,7 @@ module.exports = function(app, passport){
     });
 
 
-    app.delete('/menus/:id', mw.checkToken, (req,res) => {
+    app.delete('/menus/:id', checkToken, (req,res) => {
         let id = req.params.id;
         menusModel.softDelete(id,(err, data) => {
             if(err){
@@ -87,7 +87,7 @@ module.exports = function(app, passport){
         });
     });
 
-    app.delete('/menus/kill/:id', mw.checkToken, (req,res) => {
+    app.delete('/menus/kill/:id', checkToken, (req,res) => {
         let id = req.params.id;
         menusModel.delete(id,(err, data) => {
             if(err){

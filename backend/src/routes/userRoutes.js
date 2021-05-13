@@ -1,8 +1,8 @@
 const userModel = require('../models/user.js');
-const mw = require('../shared/middlewares.js');
+const checkToken = require('../shared/middlewares.js');
 
 module.exports = function (app, passport){
-    app.get('/usuarios', mw.checkToken, (req, res) => {
+    app.get('/usuarios', checkToken, (req, res) => {
         userModel.getAll((err, data) => {
             res.status(200).json(data);
         });

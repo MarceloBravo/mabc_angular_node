@@ -3,7 +3,7 @@ const tools = require('../shared/tools.js')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 
-const secret = require('../shared/constants');
+const constantes = require('../shared/constants');
 
 let cnn = connection.conect();
 
@@ -41,7 +41,8 @@ login.getUserData = async (credentials, callback) => {
                     if(err){
                         return callback(err, {access_token: null, user:null})
                     }else{
-                        access_token = jwt.sign({id: result.id}, secret, {issuer: credentials.host})    //Agregar datos al token: https://www.npmjs.com/package/jsonwebtoken
+                        console.log('SECRET', constantes.secret);
+                        access_token = jwt.sign({id: result.id}, constantes.secret, {issuer: credentials.host})    //Agregar datos al token: https://www.npmjs.com/package/jsonwebtoken
                         return callback(null,{access_token, user: row})
                     }
                 })

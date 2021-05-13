@@ -1,11 +1,11 @@
 const connection = require('../../db/connection.js');
-const tools = require('../shared/tools.js');
+const constantes = require('../shared/constants');
+const todayToString = require('../shared/functions');
 
 let cnn = connection.conect();
 
 let menusModel = {};
 
-let regPerPage = 10;
 
 // ******************* MENÚ DEL ESCRITORIO DE LA APLICACIÓN *******************
 //Retorna el menú principal de la aplicación
@@ -80,8 +80,8 @@ function subMenus(idMenuPadre, idRol){
 // ******************* MANTENEDOR DE MENÚ *******************
 menusModel.getPage = (pag, callback) => {    
     if(cnn){
-        let desde = pag  * regPerPage;
-        let hasta = desde + regPerPage;
+        let desde = pag  * constantes.regPerPage;
+        let hasta = desde + constantes.regPerPage;
         let qry = `
             SELECT 
                 m.id,
@@ -103,7 +103,7 @@ menusModel.getPage = (pag, callback) => {
                 return callback({mensaje: err.message, tipoMensaje: 'danger', id: -1});
             }else{
                 let totRows = await totoReg();
-                return callback(err, {data: res, page: pag, rowsPerPage: regPerPage, rows: totRows});
+                return callback(err, {data: res, page: pag, rowsPerPage: constantes.regPerPage, rows: totRows});
             }
         })
     }else{
@@ -118,7 +118,8 @@ const totoReg = () => {
     return new Promise((resolve, reject) => {
         cnn.query(qry,(err, res) => {
             if(err){
-                return reject(err);                
+                console.log(err.message);
+                return reject(0);                
             }else{
                 return resolve(res[0].totRows);
             }
@@ -231,7 +232,7 @@ menusModel.getAll = (callback) => {
 
 menusModel.insert = (data, callback) => {
     if(cnn){
-        let createdAt = getStringCurrentDate();
+        let createdAt = todayToString();
         let updatedAt = createdAt;
 
         let qry = `
@@ -272,7 +273,7 @@ menusModel.insert = (data, callback) => {
 
 menusModel.update = (id, data, callback) => {
     if(cnn){
-        let updatedAt = getStringCurrentDate();
+        let updatedAt = todayToString();
 
         let qry = `
             UPDATE menus SET 
@@ -300,7 +301,7 @@ menusModel.update = (id, data, callback) => {
 
 menusModel.softDelete = (id, callback) => {
     if(cnn){
-        let deletedAt = getStringCurrentDate();
+        let deletedAt = todayToString();
         let qry = `
             UPDATE menus SET 
                 deleted_at = '${deletedAt}' 
@@ -338,11 +339,6 @@ menusModel.delete = (id, callback) => {
     }else{
         return callback({mensaje: 'Conexión inactiva.', tipoMensaje: 'danger', id: -1})
     }
-}
-
-const getStringCurrentDate = () => {
-    let fecha = new Date();
-    return `${fecha.getFullYear()}/${(fecha.getMonth() < 10 ? '0' : '')+fecha.getMonth()}/${(fecha.getDate() < 10 ? '0' : '') + fecha.getDate()}`;
 }
 // ******************* FIN MANTENEDOR DE MENÚ *******************
 
