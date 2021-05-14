@@ -158,7 +158,7 @@ userModel.delete = (data, callback) => {
         let qry =  `DELETE FROM users WHERE id = ${cnn.escape(data.id)}`
         cnn.query(qry, (err, result) => {
             if(err){
-                mensaje = 'Ocurrio un error al intentar eliminar el registro.'
+                mensaje = 'Ocurrió un error al intentar eliminar el registro.'
                 tipo = 'danger'
                 id = data.id
             }else{

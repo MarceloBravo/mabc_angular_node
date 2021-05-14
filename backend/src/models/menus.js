@@ -256,7 +256,7 @@ menusModel.insert = (data, callback) => {
         cnn.query(qry, (err, result) => {
             if(err){
                 console.log(err);
-                mensaje = 'Ocurrio un error al intentar agregar el registro: '+err.message;
+                mensaje = 'Ocurrió un error al intentar agregar el registro: '+err.message;
                 tipoMensaje = 'danger';
                 id = -1;
             }else{
@@ -288,7 +288,7 @@ menusModel.update = (id, data, callback) => {
         cnn.query(qry, (err, result) => {
             if(err){
                 console.log(err);
-                return callback({mensaje: 'Ocurrio un error al intentar actualizar el registro: ' + err.message, tipoMensaje: 'danger', id: -1});
+                return callback({mensaje: 'Ocurrió un error al intentar actualizar el registro: ' + err.message, tipoMensaje: 'danger', id: -1});
             }else{
                 return callback(err, {mensaje: 'El registro ha sidio actualizado exitosamente.', tipoMensaje: 'success', id: id})
             }
@@ -311,7 +311,7 @@ menusModel.softDelete = (id, callback) => {
         cnn.query(qry, (err, result) => {
             if(err){
                 console.log(err);
-                return callback({mensaje: 'Ocurrio un error al intentar eliminar el registro: ' + err.message, tipoMensaje: 'danger', id: -1});
+                return callback({mensaje: 'Ocurrió un error al intentar eliminar el registro: ' + err.message, tipoMensaje: 'danger', id: -1});
             }else{
                 return callback(err, {mensaje: 'El registro ha sidio eliminado exitosamente.', tipoMensaje: 'success', id})
             }
@@ -331,7 +331,7 @@ menusModel.delete = (id, callback) => {
         cnn.query(qry, (err, result) => {
             if(err){
                 console.log(err);
-                return callback({mensaje: 'Ocurrio un error al intentar eliminar el registro: ' + err.message, tipoMensaje: 'danger', id: -1});
+                return callback({mensaje: 'Ocurrió un error al intentar eliminar el registro: ' + err.message, tipoMensaje: 'danger', id: -1});
             }else{
                 return callback(err, {mensaje: 'El registro ha sidio eliminado exitosamente.', tipoMensaje: 'success', id})
             }

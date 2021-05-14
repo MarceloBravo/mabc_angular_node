@@ -2,7 +2,7 @@ const pantallasModel = require('../models/pantalla')
 const checkToken = require('../shared/middlewares')
 
 module.exports = function(app, passport){
-    app.get('/pantallas/pag/:page', (req, res) => {
+    app.get('/pantallas/pag/:page', checkToken, (req, res) => {
         pantallasModel.getPage(req.params.page, (err, data) => {
             if(err){
                 res.json(err);
@@ -13,7 +13,7 @@ module.exports = function(app, passport){
     });
 
 
-    app.get('/pantallas/get/all',(req, res) => {
+    app.get('/pantallas/get/all', checkToken, (req, res) => {
         pantallasModel.getAll((err, data) => {
             if(err){
                 res.json(err);
@@ -24,7 +24,7 @@ module.exports = function(app, passport){
     });
 
 
-    app.get('/pantallas/:id', (req, res) => {
+    app.get('/pantallas/:id', checkToken, (req, res) => {
         pantallasModel.get(req.params.id, (err, data) => {
             if(err){
                 res.json(err);
@@ -35,7 +35,7 @@ module.exports = function(app, passport){
     });
     
 
-    app.get('/pantallas/filtrar/:texto/:pag', (req, res) => {
+    app.get('/pantallas/filtrar/:texto/:pag', checkToken, (req, res) => {
         pantallasModel.filter(req.params.texto, req.params.pag, (err, data) => {
             if(err){
                 res.json(err);
@@ -46,7 +46,7 @@ module.exports = function(app, passport){
     });
 
 
-    app.post('/pantallas', (req, res) => {
+    app.post('/pantallas', checkToken, (req, res) => {
         pantallasModel.insert(req.body, (err, data) => {
             if(err){
                 res.json(err);
@@ -57,7 +57,7 @@ module.exports = function(app, passport){
     });
 
 
-    app.put('/pantallas/:id', (req, res) => {
+    app.put('/pantallas/:id', checkToken, (req, res) => {
         pantallasModel.update(req.params.id, req.body, (err, data) => {
             if(err){
                 res.json(err);
@@ -68,7 +68,7 @@ module.exports = function(app, passport){
     });
     
 
-    app.delete('/pantallas/:id', (req, res) => {
+    app.delete('/pantallas/:id', checkToken, (req, res) => {
         pantallasModel.sofDelete(req.params.id, (err, data) => {
             if(err){
                 res.json(err);

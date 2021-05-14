@@ -13,19 +13,22 @@ pantallaModel.getPage = (pag, callback) => {
         let hasta = desde + constantes.regPerPage;
         let qry = `
                 SELECT
-                    id,
-                    nombre,
-                    created_at,
-                    updated_at,
-                    deleted_at,
-                    menus_id,
-                    permite_crear,
-                    permite_modificar,
-                    permite_eliminar
+                    p.id,
+                    p.nombre,
+                    m.nombre as menu,
+                    m.url,
+                    p.created_at,
+                    p.updated_at,
+                    p.deleted_at,
+                    p.menus_id,
+                    p.permite_crear,
+                    p.permite_modificar,
+                    p.permite_eliminar
                 FROM 
-                    pantallas
+                    pantallas p
+                    INNER JOIN menus m ON p.menus_id = m.id
                 WHERE
-                    deleted_at IS NULL
+                    p.deleted_at IS NULL
                 LIMIT ${desde}, ${hasta}
                 `;
 
@@ -148,7 +151,7 @@ pantallaModel.filter = (texto, pag, callback) => {
             cnn.query(qry, async (err, res) => {
                 if(err){
                     console.log(err);
-                    return callback({mensaje: 'Ocurrio un error al solicitar los datos.', tipoMensaje: 'danger', id:-1});
+                    return callback({mensaje: 'Ocurrió un error al solicitar los datos.', tipoMensaje: 'danger', id:-1});
                 }else{
                     let totReg = await totRows();
                     return callback(null, {data: res, rows: totReg, rowsPerPage: constantes.regPerPage, page: pag});
@@ -185,7 +188,7 @@ pantallaModel.insert = (data, callback) => {
         cnn.query(qry, (err, result) => {
             if(err){
                 console.log(err);
-                return callback({mensaje: 'Ocurrio un error al agregar el registro.', tipoMensaje: 'danger', id:-1});
+                return callback({mensaje: 'Ocurrió un error al agregar el registro.', tipoMensaje: 'danger', id:-1});
             }else{
                 return callback({mensaje: 'El registro ha sido agregado exitosamente.', tipoMensaje: 'success', id: result.insertId});
             }
@@ -214,7 +217,7 @@ pantallaModel.update = (id, data, callback) => {
         cnn.query(qry, (err, result) => {
             if(err){
                 console.log(err);
-                return callback({mensaje: 'Ocurrio un error al actualizar el registro.', tipoMensaje: 'danger', id:-1});
+                return callback({mensaje: 'Ocurrió un error al actualizar el registro.', tipoMensaje: 'danger', id:-1});
             }else{
                 return callback({mensaje: 'El registro ha sido actualizado exitosamente.', tipoMensaje: 'success', id: result.insertId});
             }
@@ -237,7 +240,7 @@ pantallaModel.sofDelete = (id, callback) => {
         cnn.query(qry, (err, result) => {
             if(err){
                 console.log(err);
-                return callback({mensaje: 'Ocurrio un error al eliminar el registro.', tipoMensaje: 'danger', id:-1});
+                return callback({mensaje: 'Ocurrió un error al eliminar el registro.', tipoMensaje: 'danger', id:-1});
             }else{
                 return callback({mensaje: 'El registro ha sido eliminado exitosamente.', tipoMensaje: 'success', id: result.insertId});
             }
@@ -259,7 +262,7 @@ pantallaModel.delete = (id, callback) => {
         cnn.query(qry, (err, result) => {
             if(err){
                 console.log(err);
-                return callback({mensaje: 'Ocurrio un error al eliminar el registro.', tipoMensaje: 'danger', id:-1});
+                return callback({mensaje: 'Ocurrió un error al eliminar el registro.', tipoMensaje: 'danger', id:-1});
             }else{
                 return callback({mensaje: 'El registro ha sido eliminado exitosamente.', tipoMensaje: 'success', id: result.insertId});
             }
