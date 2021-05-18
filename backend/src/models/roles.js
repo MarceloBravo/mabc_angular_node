@@ -7,8 +7,7 @@ let rowsPerPage = constantes.regPerPage;
 
 let rolesModel = {};
 
-const getTotRows = () => {
-    let qry = 'SELECT COUNT(*) AS totReg FROM roles WHERE deleted_at IS NULL'
+const getTotRows = (qry) => {
     return new Promise(( resolve, reject) => {
         cnn.query(qry, (err, res) => {
             if(err){
@@ -46,7 +45,7 @@ rolesModel.getPage = (pag, callback) => {
                     console.log(err);
                     return callback({mensaje: 'Ocurrió un error al solicitar los registros: '+err.message, tipoMensaje: 'danger', id:-1});
                 }else{
-                    let totRows = await getTotRows();
+                    let totRows = await getTotRows('SELECT COUNT(*) AS totReg FROM roles WHERE deleted_at IS NULL');
                     return callback(null, {data:res, page: pag, rows: totRows, rowsPerPage: constantes.regPerPage});
                 }
             });
@@ -120,6 +119,14 @@ rolesModel.getAll = (callback) => {
 
 rolesModel.filter = (texto, pag, callback) => {
     if(cnn){
+        let filtro = `AND 
+                    (
+                        name LIKE ${cnn.escape('%' + texto+ '%')}
+                        OR description LIKE ${cnn.escape('%' + texto + '%')}
+                        OR DATE_FORMAT(created_at, "%d/%M/%Y") LIKE ${cnn.escape('%' + texto + '%')}
+                        OR DATE_FORMAT(updated_at, "%d/%M/%Y") LIKE ${cnn.escape('%' + texto + '%')}
+                    )`;
+                    
         let desde = rowsPerPage  * pag;
         let hasta = desde + rowsPerPage;
         let qry = `
@@ -134,13 +141,7 @@ rolesModel.filter = (texto, pag, callback) => {
                     roles
                 WHERE 
                     deleted_at IS NULL
-                    AND 
-                    (
-                        name LIKE ${cnn.escape('%' + texto+ '%')}
-                        OR description LIKE ${cnn.escape('%' + texto + '%')}
-                        OR DATE_FORMAT(created_at, "%d/%M/%Y") LIKE ${cnn.escape('%' + texto + '%')}
-                        OR DATE_FORMAT(updated_at, "%d/%M/%Y") LIKE ${cnn.escape('%' + texto + '%')}
-                    )
+                    ${filtro}
                 LIMIT ${desde}, ${hasta}
             `;
 
@@ -149,7 +150,7 @@ rolesModel.filter = (texto, pag, callback) => {
                     console.log(err);
                     return callback({mensaje: 'Ocurrió un error al filtrar los registros: '+err.message, tipoMensaje: 'danger', id:-1});
                 }else{
-                    let totRows = await getTotRows();
+                    let totRows = await getTotRows(`SELECT COUNT(*) AS totReg FROM roles WHERE deleted_at IS NULL ${filtro}`);
                     return callback(null, {data:res, page: pag, rows: totRows, rowsPerPage: constantes.regPerPage});
                 }
             });

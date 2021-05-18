@@ -1,6 +1,9 @@
 const cors = require('cors');   //Evitar el error de CORS: https://www.techiediaries.com/fix-cors-with-angular-cli-proxy-configuration/
 const express = require('express');
+var publicDir = require('path').join(__dirname,'/public');  //Configurando la carpeta public que contiene las imágenes
+
 const app = express();
+app.use(express.static(publicDir)); 
 app.use(cors());    
 
 const morgan = require('morgan');   //

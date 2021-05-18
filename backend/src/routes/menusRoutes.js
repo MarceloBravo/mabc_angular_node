@@ -1,5 +1,5 @@
 const menusModel = require('../models/menus');
-const checkToken = require('../shared/middlewares.js');
+const checkToken = require('../shared/middlewares/mw_checkToken');
 
 module.exports = function(app, passport){
     app.get('/menus/rol/:idRol', checkToken, (req, res) => {

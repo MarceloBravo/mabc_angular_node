@@ -7,7 +7,7 @@ import { TokenService } from '../token/token.service';
 })
 export class ConstantesService {
   public endPoint = "http://localhost:3000/"  //Ruta de las peticiones al backend
-  public storageImages = "http://localhost:3000/storage/" //Ruta de almnacenamiento de las imágenes en el backend
+  public storageImages = "http://localhost:3000/images/" //Ruta de almnacenamiento de las imágenes en el backend
 
   constructor(private _tokenService: TokenService) { }
 

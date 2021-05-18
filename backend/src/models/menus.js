@@ -102,7 +102,7 @@ menusModel.getPage = (pag, callback) => {
             if(err){
                 return callback({mensaje: err.message, tipoMensaje: 'danger', id: -1});
             }else{
-                let totRows = await totoReg();
+                let totRows = await totoReg(`SELECT COUNT(*) as totRows FROM menus WHERE deleted_at IS NULL`);
                 return callback(err, {data: res, page: pag, rowsPerPage: constantes.regPerPage, rows: totRows});
             }
         })
@@ -113,8 +113,7 @@ menusModel.getPage = (pag, callback) => {
 }
 
 
-const totoReg = () => {
-    let qry = `SELECT COUNT(*) as totRows FROM menus WHERE deleted_at IS NULL`;
+const totoReg = (qry) => {
     return new Promise((resolve, reject) => {
         cnn.query(qry,(err, res) => {
             if(err){
@@ -129,6 +128,13 @@ const totoReg = () => {
 
 menusModel.filter = (texto, pag, callback) => {    
     if(cnn){
+        let filtro = `AND (
+                            m.id LIKE ${cnn.escape('%'+texto+'%')} OR 
+                            m.nombre LIKE ${cnn.escape('%'+texto+'%')} OR 
+                            m.url LIKE ${cnn.escape('%'+texto+'%')} OR 
+                            m.menu_padre_id LIKE ${cnn.escape('%'+texto+'%')} OR 
+                            m.posicion LIKE ${cnn.escape('%'+texto+'%')} 
+                        )`;
         let desde = pag  * 10
         let hasta = desde + 10;
         let qry = `
@@ -143,14 +149,8 @@ menusModel.filter = (texto, pag, callback) => {
             FROM 
                 menus m
             WHERE 
-                deleted_at IS NULL AND 
-                (
-                    m.id LIKE ${cnn.escape('%'+texto+'%')} OR 
-                    m.nombre LIKE ${cnn.escape('%'+texto+'%')} OR 
-                    m.url LIKE ${cnn.escape('%'+texto+'%')} OR 
-                    m.menu_padre_id LIKE ${cnn.escape('%'+texto+'%')} OR 
-                    m.posicion LIKE ${cnn.escape('%'+texto+'%')} 
-                )
+                deleted_at IS NULL 
+                ${filtro} 
             LIMIT ${desde}, ${hasta}
         `;
         console.log(qry)
@@ -159,7 +159,8 @@ menusModel.filter = (texto, pag, callback) => {
             if(err){
                 return callback({mensaje: err.message, tipoMensaje: 'danger', id: -1});
             }else{
-                return callback(err, res);
+                let rows = totoReg(`SELECT COUNT(*) as totRows FROM menus WHERE deleted_at IS NULL ${filtro}`)
+                return callback(err, {data: res, page: pag, rowsPerPage: constantes.regPerPage, rows: totRows});
             }
         })
     }else{

@@ -1,4 +1,4 @@
-const constantes = require('../shared/constants');
+const constantes = require('../constants');
 const jwt = require('jsonwebtoken');
 
 module.exports = checkToken = async (req, res, next) => {

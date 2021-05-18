@@ -37,7 +37,7 @@ pantallaModel.getPage = (pag, callback) => {
                     console.log(err);
                     return callback({mensaje: 'Ha ocurrido un error al solicitar los datos: ' + err.message, tipoMensaje: 'danger', id:-1});
                 }else{
-                    let totReg = await totRows();
+                    let totReg = await totRows(`SELECT COUNT(*) AS totRows FROM pantallas WHERE deleted_at IS NULL`);
                     return callback(err, {data: res, rows: totReg, rowsPerPage: constantes.regPerPage, page: pag});
                 }
             });
@@ -46,8 +46,7 @@ pantallaModel.getPage = (pag, callback) => {
     }
 }
 
-const totRows = () => {
-    let qry = `SELECT COUNT(*) AS totRows FROM pantallas WHERE deleted_at IS NULL`
+const totRows = (qry) => {
     return new Promise((resolve, reject) => {
         cnn.query(qry, (err, res) => {
             if(err){
@@ -153,7 +152,7 @@ pantallaModel.filter = (texto, pag, callback) => {
                     console.log(err);
                     return callback({mensaje: 'Ocurrió un error al solicitar los datos.', tipoMensaje: 'danger', id:-1});
                 }else{
-                    let totReg = await totRows();
+                    let totReg = await totRows(`SELECT COUNT(*) AS totRows FROM pantallas WHERE deleted_at IS NULL AND nombre LIKE '%${texto}%'`);
                     return callback(null, {data: res, rows: totReg, rowsPerPage: constantes.regPerPage, page: pag});
                 }
             })

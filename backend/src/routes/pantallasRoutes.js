@@ -1,5 +1,5 @@
 const pantallasModel = require('../models/pantalla')
-const checkToken = require('../shared/middlewares')
+const checkToken = require('../shared/middlewares/mw_checkToken');
 
 module.exports = function(app, passport){
     app.get('/pantallas/pag/:page', checkToken, (req, res) => {

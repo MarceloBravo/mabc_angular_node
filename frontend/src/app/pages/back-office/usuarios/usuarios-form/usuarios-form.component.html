@@ -25,7 +25,7 @@
             <h5 class="card-title">Mantenedor de Usuarios</h5>
           </div>
           <div class="card-body">
-            <form [formGroup]="form" id="form">
+            <form [formGroup]="form" id="form" enctype="multipart/form-data">
 
               <div class="form-group row">
 
@@ -126,7 +126,7 @@
                   </select>
 
                   <!-- Mensajes de error -->
-                  <div *ngIf="form.get('roles')?.hasError('required') && form.get('roles')?.dirty" class="error-input">Selecciona almeno un rol del la lista.</div>
+                  <div *ngIf="form.get('roles')?.hasError('required') && form.get('roles')?.dirty" class="error-input">Selecciona almenos un rol del la lista.</div>
                   <!-- /Mensajes de error -->
                 </div>
               </div>

@@ -1,5 +1,5 @@
 const rolesModel = require('../models/roles');
-const checkToken = require('../shared/middlewares');
+const checkToken = require('../shared/middlewares/mw_checkToken');
 
 module.exports = function(app, passport){
     app.get('/roles/pag/:pag', checkToken, (req, res) => {
