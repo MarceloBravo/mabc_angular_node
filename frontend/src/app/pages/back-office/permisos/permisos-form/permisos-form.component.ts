@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { Permisos } from 'src/app/class/permisos/permisos';
 import { Rol } from 'src/app/class/rol/rol';
 import { PermisosService } from '../../../../services/permisos/permisos.service';
