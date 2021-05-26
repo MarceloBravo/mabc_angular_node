@@ -52,7 +52,8 @@ function subMenus(idMenuPadre, idRol){
                 m.nombre,
                 m.url,
                 m.menu_padre_id,
-                m.posicion
+                m.posicion, 
+                pr.acceder 
             FROM 
                 menus m
                 INNER JOIN pantallas p ON m.id = p.menus_id 

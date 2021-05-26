@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Permisos } from '../../class/permisos/permisos';
 import { ConstantesService } from '../constantes/constantes.service';
@@ -8,6 +8,7 @@ import { ConstantesService } from '../constantes/constantes.service';
 })
 export class PermisosService {
   private url = "permisos";
+  public permisosActualizados$: EventEmitter<null> = new EventEmitter<null>()
 
   constructor(
     private httpClient: HttpClient,
@@ -29,6 +30,7 @@ export class PermisosService {
         p.eliminar = p.eliminar?true: false
       }
       );
+      this.permisosActualizados$.emit(null)
     //console.log(data, JSON.stringify(data));
     return this.httpClient.post(`${this._constantes.endPoint}${this.url}`,data,{headers: this._constantes.header()});
   }
