@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SharedService } from '../shared/shared.service';
 import { TokenService } from '../token/token.service';
 import { FormGroup } from '@angular/forms';
 import { ConstantesService } from '../constantes/constantes.service';
+import { User } from 'src/app/class/User/user';
+import { Rol } from 'src/app/class/rol/rol';
 
 
 @Injectable({
@@ -12,6 +14,8 @@ import { ConstantesService } from '../constantes/constantes.service';
 export class LoginService {
   private endPoint = 'login';
   private header: HttpHeaders = new HttpHeaders({'Content-type': 'application/json'});
+  public usuarioActual$: EventEmitter<User> = new EventEmitter<User>()
+  public rolesUsuario$: EventEmitter<Rol[]> = new EventEmitter<Rol[]>()
 
   constructor(
     private httpClient: HttpClient,
@@ -62,5 +66,25 @@ export class LoginService {
       {},
       {headers: this._constantes.header(<string><unknown>token)}
       );
+  }
+
+  setUsuarioActual(user: User){
+    this.usuarioActual$.emit(user);
+    sessionStorage.setItem('user', JSON.stringify(user))
+  }
+
+  setRolesUsuario(arrRoles: Rol[]){
+    this.rolesUsuario$.emit(arrRoles)
+    sessionStorage.setItem('roles', JSON.stringify(arrRoles))
+  }
+
+  getUsuarioActual(): User | null{
+    let strUser = sessionStorage.getItem('user')
+    return strUser ? JSON.parse(strUser) :  null
+  }
+
+  getRolesUsuario(): Rol[]{
+    let strRoles = sessionStorage.getItem('roles')
+    return strRoles ? JSON.parse(strRoles) : []
   }
 }

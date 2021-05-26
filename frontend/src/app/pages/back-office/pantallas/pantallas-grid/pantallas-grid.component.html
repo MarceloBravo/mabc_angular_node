@@ -25,20 +25,18 @@
         [cabeceras]="gridHeaders"
         [registros]="data"
         [columnasVisibles]="visibleColumns"
-        (idEliminar)="eliminar()"
+        (idEliminar)="eliminar($event)"
         (textoFiltro)="filtrar($event)"
       >
       </app-grid>
-
-      <app-paginacion
+    </div>
+    <app-paginacion
         [paginacion]="paginacion"
         [rutaGet]="'/api/pantallas/pag/'"
         (paginaAnterior)="mostrarPagina($event)"
         (paginaSiguiente)="mostrarPagina($event)"
         (mostrarPagina)="mostrarPagina($event)"
       ></app-paginacion>
-
-    </div>
   </div>
 
 </div>

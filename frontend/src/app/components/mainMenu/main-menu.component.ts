@@ -2,6 +2,8 @@ import { Component, HostBinding, OnInit, ViewEncapsulation } from '@angular/core
 import { ScriptServicesService } from 'src/app/services/scriptServices/script-services.service';
 import { MenusService } from '../../services/menus/menus.service';
 import { Menu } from '../../class/menus/menu';
+import { PermisosService } from '../../services/permisos/permisos.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-menu',
@@ -17,13 +19,25 @@ export class MainMenuComponent implements OnInit {
 
   constructor(
     private _scriptService: ScriptServicesService,
-    private _menusService: MenusService
+    private _menusService: MenusService,
+    private _permisosService: PermisosService,
+    private router: Router
   ) {
     this.loadScript()
     this.getMenus();
   }
 
   ngOnInit(): void {
+    this._permisosService.permisosActualizados$.subscribe(async() => {
+      this.getMenus(true);
+    })
+  }
+
+  private reloadCurrentRoute() {
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
   }
 
   private loadScript(){
@@ -40,12 +54,11 @@ export class MainMenuComponent implements OnInit {
     ]);
   }
 
-  private getMenus(){
+  private getMenus(reloadComponent: boolean = false){
     this._menusService.getMenus(1).subscribe(
       (res: any)=>{
         this.menus = res;
-        //this.menus = this.menus.sort((a: any, b: any) => (a.menu_padre_id - b.menu_padre_id)).sort((a: any, b: any) => (a.posicion - b.posicion))
-        //console.log('menus',res);
+        if(reloadComponent)this.reloadCurrentRoute()
       },error=>{
         console.log(error);
       }

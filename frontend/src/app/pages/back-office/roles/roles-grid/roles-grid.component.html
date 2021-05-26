@@ -22,7 +22,7 @@
 
       <app-grid
         [titulo]="'Listado de roles'"
-        [cabeceras]="['Nombre','Descripción','Fecha creación','Fecha actualización','Acciones']"
+        [cabeceras]="['Nombre','Descripción','Fecha creación','Fecha actualización']"
         [registros]="roles"
         [columnasVisibles]="['name','description','created_at','updated_at']"
         (idEliminar)="eliminar($event)"

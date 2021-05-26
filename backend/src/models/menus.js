@@ -1,65 +1,14 @@
 const connection = require('../../db/connection.js');
-const tools = require('../shared/tools.js');
+const constantes = require('../shared/constants');
+const todayToString = require('../shared/functions');
 
 let cnn = connection.conect();
 
 let menusModel = {};
 
+
 // ******************* MENÚ DEL ESCRITORIO DE LA APLICACIÓN *******************
 //Retorna el menú principal de la aplicación
-menusModel.menu = (idRol, callback) => {
-    if(cnn){
-        let qry =  `
-            SELECT 
-                mnu.id,
-                mnu.nombre,
-                mnu.url,
-                mnu.menu_padre_id,
-                mnu.posicion, 
-                CASE mnu.menu_padre_id WHEN 0 THEN mnu.id ELSE mnu.menu_padre_id END AS sub_menu 
-            FROM (
-            SELECT 
-                m.id,
-                m.nombre,
-                m.url,
-                m.menu_padre_id,
-                m.posicion 
-            FROM 
-                menus m
-            WHERE menu_padre_id = 0 
-                
-            UNION ALL
-            
-            SELECT 
-                m.id,
-                m.nombre,
-                m.url,
-                m.menu_padre_id,
-                m.posicion
-            FROM 
-                menus m
-                INNER JOIN pantallas p ON m.id = p.menus_id 
-                INNER JOIN permisos pr ON p.id = pr.pantallas_id 
-            WHERE 
-                m.deleted_at IS NULL AND 
-                roles_id = ${cnn.escape(idRol)}
-            ) as mnu
-            ORDER BY sub_menu desc, url, posicion
-        `;
-
-        cnn.query(qry, (err, res) => {
-            if(err){
-                return callback({mensaje: err.message, tipoMensaje:'danger', id:-1, errores: err});        
-            }else{
-                return callback(err, res);
-            }
-        });
-    }else{
-        return callback({mensaje:'Conexión inactiva.', tipoMensaje:'danger', id:-1});
-    }
-}
-
-
 menusModel.mainMenu = (idRol, callback) => {
     if(cnn){
         let qry = `
@@ -73,7 +22,7 @@ menusModel.mainMenu = (idRol, callback) => {
                 menus m
             WHERE 
                 menu_padre_id = 0 
-                -- AND roles_id = ${cnn.escape(idRol)}
+                AND deleted_at IS NULL 
             ORDER BY 
                 posicion
             `;
@@ -103,7 +52,8 @@ function subMenus(idMenuPadre, idRol){
                 m.nombre,
                 m.url,
                 m.menu_padre_id,
-                m.posicion
+                m.posicion, 
+                pr.acceder 
             FROM 
                 menus m
                 INNER JOIN pantallas p ON m.id = p.menus_id 
@@ -129,6 +79,98 @@ function subMenus(idMenuPadre, idRol){
 
 
 // ******************* MANTENEDOR DE MENÚ *******************
+menusModel.getPage = (pag, callback) => {    
+    if(cnn){
+        let desde = pag  * constantes.regPerPage;
+        let hasta = desde + constantes.regPerPage;
+        let qry = `
+            SELECT 
+                m.id,
+                m.nombre,
+                m.url,
+                m.menu_padre_id,
+                m.posicion,
+                created_at,
+                updated_at 
+            FROM 
+                menus m
+            WHERE 
+                deleted_at IS NULL 
+            LIMIT ${desde}, ${hasta}
+        `;
+        
+        cnn.query(qry, async (err, res) => {
+            if(err){
+                return callback({mensaje: err.message, tipoMensaje: 'danger', id: -1});
+            }else{
+                let totRows = await totoReg(`SELECT COUNT(*) as totRows FROM menus WHERE deleted_at IS NULL`);
+                return callback(err, {data: res, page: pag, rowsPerPage: constantes.regPerPage, rows: totRows});
+            }
+        })
+    }else{
+        return callback({mensaje: 'Conexión inactiva.', tipoMensaje: 'danger', id: -1});
+    }
+
+}
+
+
+const totoReg = (qry) => {
+    return new Promise((resolve, reject) => {
+        cnn.query(qry,(err, res) => {
+            if(err){
+                console.log(err.message);
+                return reject(0);                
+            }else{
+                return resolve(res[0].totRows);
+            }
+        })
+    })
+}
+
+menusModel.filter = (texto, pag, callback) => {    
+    if(cnn){
+        let filtro = `AND (
+                            m.id LIKE ${cnn.escape('%'+texto+'%')} OR 
+                            m.nombre LIKE ${cnn.escape('%'+texto+'%')} OR 
+                            m.url LIKE ${cnn.escape('%'+texto+'%')} OR 
+                            m.menu_padre_id LIKE ${cnn.escape('%'+texto+'%')} OR 
+                            m.posicion LIKE ${cnn.escape('%'+texto+'%')} 
+                        )`;
+        let desde = pag  * 10
+        let hasta = desde + 10;
+        let qry = `
+            SELECT 
+                m.id,
+                m.nombre,
+                m.url,
+                m.menu_padre_id,
+                m.posicion,
+                created_at,
+                updated_at 
+            FROM 
+                menus m
+            WHERE 
+                deleted_at IS NULL 
+                ${filtro} 
+            LIMIT ${desde}, ${hasta}
+        `;
+        console.log(qry)
+        
+        cnn.query(qry, (err, res) => {
+            if(err){
+                return callback({mensaje: err.message, tipoMensaje: 'danger', id: -1});
+            }else{
+                let rows = totoReg(`SELECT COUNT(*) as totRows FROM menus WHERE deleted_at IS NULL ${filtro}`)
+                return callback(err, {data: res, page: pag, rowsPerPage: constantes.regPerPage, rows: totRows});
+            }
+        })
+    }else{
+        return callback({mensaje: 'Conexión inactiva.', tipoMensaje: 'danger', id: -1});
+    }
+
+}
+
+
 menusModel.get = (id, callback) => {
     if(cnn){
         let qry = `
@@ -138,7 +180,7 @@ menusModel.get = (id, callback) => {
                 m.url,
                 m.menu_padre_id,
                 m.posicion,
-                creted_at,
+                created_at,
                 updated_at 
             FROM 
                 menus m
@@ -151,7 +193,7 @@ menusModel.get = (id, callback) => {
             if(err){
                 return callback({mensaje: err.message, tipoMensaje: 'danger', id: -1});
             }else{
-                return callback(err, res);
+                return callback(err, res[0]);
             }
         })
     }else{
@@ -170,7 +212,7 @@ menusModel.getAll = (callback) => {
                 m.url,
                 m.menu_padre_id,
                 m.posicion,
-                creted_at,
+                created_at,
                 updated_at 
             FROM 
                 menus m
@@ -186,6 +228,118 @@ menusModel.getAll = (callback) => {
         })
     }else{
         return callback({mensaje: 'Conexión inactiva.', tipoMensaje: 'danger', id: -1});
+    }
+}
+
+
+menusModel.insert = (data, callback) => {
+    if(cnn){
+        let createdAt = todayToString();
+        let updatedAt = createdAt;
+
+        let qry = `
+            INSERT INTO menus (
+                nombre,
+                url,                
+                menu_padre_id,
+                posicion,
+                created_at,
+                updated_at
+            ) VALUES (
+                ${cnn.escape(data.nombre)},
+                ${cnn.escape(data.url)},
+                ${cnn.escape(data.menu_padre_id)},
+                ${cnn.escape(data.posicion)},
+                '${createdAt}',
+                '${updatedAt}'
+            )
+        `;
+
+        cnn.query(qry, (err, result) => {
+            if(err){
+                console.log(err);
+                mensaje = 'Ocurrió un error al intentar agregar el registro: '+err.message;
+                tipoMensaje = 'danger';
+                id = -1;
+            }else{
+                mensaje = 'El registro ha sido ingresado exitosamente.';
+                tipoMensaje = 'success';
+                id = result.insertId;
+            }
+            return callback({mensaje, tipoMensaje, id});
+        });
+    }else{
+        return callback({mensaje: 'Conexión inactiva.', tipoMensaje: 'danger', id:-1});
+    }
+}
+
+menusModel.update = (id, data, callback) => {
+    if(cnn){
+        let updatedAt = todayToString();
+
+        let qry = `
+            UPDATE menus SET 
+                nombre = ${cnn.escape(data.nombre)},
+                url = ${cnn.escape(data.url)},
+                menu_padre_id = ${cnn.escape(data.menu_padre_id)},
+                posicion = ${cnn.escape(data.posicion)},
+                updated_at = '${updatedAt}' 
+            WHERE id = ${cnn.escape(id)}
+        `;
+
+        cnn.query(qry, (err, result) => {
+            if(err){
+                console.log(err);
+                return callback({mensaje: 'Ocurrió un error al intentar actualizar el registro: ' + err.message, tipoMensaje: 'danger', id: -1});
+            }else{
+                return callback(err, {mensaje: 'El registro ha sidio actualizado exitosamente.', tipoMensaje: 'success', id: id})
+            }
+        });
+    }else{
+        return callback({mensaje: 'Conexión inactiva.', tipoMensaje: 'danger', id: -1})
+    }
+}
+
+
+menusModel.softDelete = (id, callback) => {
+    if(cnn){
+        let deletedAt = todayToString();
+        let qry = `
+            UPDATE menus SET 
+                deleted_at = '${deletedAt}' 
+            WHERE id = ${cnn.escape(id)}
+        `;
+
+        cnn.query(qry, (err, result) => {
+            if(err){
+                console.log(err);
+                return callback({mensaje: 'Ocurrió un error al intentar eliminar el registro: ' + err.message, tipoMensaje: 'danger', id: -1});
+            }else{
+                return callback(err, {mensaje: 'El registro ha sidio eliminado exitosamente.', tipoMensaje: 'success', id})
+            }
+        });
+    }else{
+        return callback({mensaje: 'Conexión inactiva.', tipoMensaje: 'danger', id: -1})
+    }
+}
+
+
+menusModel.delete = (id, callback) => {
+    if(cnn){
+        let qry = `
+            DELETE FROM menus WHERE id = ${cnn.escape(id)}
+        `;
+
+        cnn.query(qry, (err, result) => {
+            if(err){
+                console.log(err);
+                return callback({mensaje: 'Ocurrió un error al intentar eliminar el registro: ' + err.message, tipoMensaje: 'danger', id: -1});
+            }else{
+                return callback(err, {mensaje: 'El registro ha sidio eliminado exitosamente.', tipoMensaje: 'success', id})
+            }
+        });
+    }else{
+        return callback({mensaje: 'Conexión inactiva.', tipoMensaje: 'danger', id: -1})
     }
 }
 // ******************* FIN MANTENEDOR DE MENÚ *******************

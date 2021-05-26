@@ -7,6 +7,7 @@ import { LoginService } from 'src/app/services/login/login.service';
 import { SharedService } from '../../../services/shared/shared.service';
 import { ScriptServicesService } from '../../../services/scriptServices/script-services.service';
 import { ToastService } from '../../../services/toast/toast.service';
+import { User } from 'src/app/class/User/user';
 
 @Component({
   selector: 'app-login',
@@ -57,8 +58,8 @@ export class LoginComponent implements OnInit {
         if(res.status !== 200){
           if(this._loginService.validaToken(res['access_token'])){
             this._loginService.registrarToken(res['access_token'], this.loginForm.value['remember']);
-            this._shared.user = res['user'];
-            this._shared.roles = res['roles'];
+            this._loginService.setUsuarioActual(res['user']);
+            this._loginService.setRolesUsuario(res['roles']);
             this.router.navigate(['/admin']);
           }
           this.toastService.clearToast();

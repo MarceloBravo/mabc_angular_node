@@ -6,8 +6,9 @@ import { TokenService } from '../token/token.service';
   providedIn: 'root'
 })
 export class ConstantesService {
-  public endPoint = "http://localhost:3000/"  //Ruta de las peticiones al backend
-  public storageImages = "http://localhost:3000/storage/" //Ruta de almnacenamiento de las imágenes en el backend
+  public endPoint: string = "http://localhost:3000/"  //Ruta de las peticiones al backend
+  public storageImages: string = "http://localhost:3000/images/" //Ruta de almnacenamiento de las imágenes en el backend
+  public srcDefault: string = '/assets/images/users/user.png'
 
   constructor(private _tokenService: TokenService) { }
 

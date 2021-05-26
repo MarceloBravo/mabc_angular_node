@@ -87,7 +87,6 @@ export class PantallasFormComponent implements OnInit {
         if(res['status'] === 'Token is Expired'){
           this.router.navigate(['/']);
         }else{
-          console.log(res)
           this.pantalla = res;
           this.initForm();
           this.showSpinner = false;

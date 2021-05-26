@@ -1,10 +1,11 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');    //npm install mysql2
 
 let connection = {}
 
 connection.conect = () => {
     return mysql.createConnection({
-        hhost: '127.0.0.1:3306',
+        host: '127.0.0.1',
+        port: '3306',
         user: 'root',
         password: 'mabc',
         database: 'mabc'

@@ -1,5 +1,5 @@
 <li [ngClass]="className">
-  <a *ngIf="menu?.url" class="sidebar-link" routerLink="{{ menu?.url }}">
+  <a *ngIf="menu?.url && menu?.acceder" class="sidebar-link" routerLink="{{ menu?.url }}">
     <i class="align-middle" data-feather="settings"></i>
     <span class="align-middle">{{ menu?.nombre }}</span>
   </a>

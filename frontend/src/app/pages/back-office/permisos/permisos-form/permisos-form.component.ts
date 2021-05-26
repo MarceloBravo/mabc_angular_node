@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { Permisos } from 'src/app/class/permisos/permisos';
 import { Rol } from 'src/app/class/rol/rol';
 import { PermisosService } from '../../../../services/permisos/permisos.service';
@@ -56,7 +55,6 @@ export class PermisosFormComponent implements OnInit {
       (res: any)=>{
         this.permisos = res;
         this.showSpinner = false;
-        console.log(this.permisos);
       },error=>{
         this.handlerErrors(error)
       }
@@ -77,7 +75,6 @@ export class PermisosFormComponent implements OnInit {
     this.showSpinner = true;
     this._permisosService.save(this.id, this.permisos).subscribe(
       (res: any)=>{
-        console.log(res);
         if(res.tipoMensaje === 'success'){
           this._toastService.showSuccessMessage(res.mensaje);
         }else{

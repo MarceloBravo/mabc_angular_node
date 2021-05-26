@@ -38,11 +38,10 @@ export class UsuariosFormComponent implements OnInit {
     deleted_at: new FormControl(),
     roles: new FormControl(),
     foto: new FormControl(),  //Url de la foto
+    fotoImage: new FormControl(),
   });
   public id: any = null;
-  public srcDefault: string = '/assets/images/users/user.png'
   public fileToUpload: File | undefined;
-  public fotoObject: string = ''
 
   constructor(
     private _userServices: UsuariosService,
@@ -67,7 +66,7 @@ export class UsuariosFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cargaFotoEnImageControl('','')
+    this.cargaFotoEnImageControl(null,null)
   }
 
 
@@ -84,8 +83,8 @@ export class UsuariosFormComponent implements OnInit {
       password: [this.usuario.password,[Validators.minLength(6), Validators.maxLength(20)]],
       confirm_password: [this.usuario.confirm_password,[Validators.minLength(6), Validators.maxLength(20)]],
       roles: [this.usuario.roles,[Validators.required]],
-      foto: '',
-      //fotoObject: this.usuario.fotoObject,
+      foto: this.usuario.foto,
+      fotoImage: this.usuario.fotoObject,
       created_at: this.usuario.created_at,
       updated_at: this.usuario.updated_at,
       deleted_at: this.usuario.deleted_at
@@ -104,6 +103,7 @@ export class UsuariosFormComponent implements OnInit {
       if(res['status'] === 'Token is Expired'){
         this.router.navigate(['/']);
       }else{
+        console.log('res usuarios',res)
         this.cargarDatos(res);
         this.showSpinner = false;
       }
@@ -116,7 +116,7 @@ export class UsuariosFormComponent implements OnInit {
   private cargarDatos(res: any){
     this.usuario = res;
     this.iniciarForm();
-    this.cargaFotoEnImageControl('',this.usuario.foto)
+    this.cargaFotoEnImageControl(null,this.usuario.foto)
   }
 
 
@@ -182,7 +182,11 @@ export class UsuariosFormComponent implements OnInit {
 
 
   private grabar(){
-    this.form.value.foto = this.fileToUpload?.name
+
+    if(this.fileToUpload){
+      this.form.value.foto = this.fileToUpload?.name
+      this.form.value.fotoImage = this.fileToUpload
+    }
 
     this.showSpinner = true;
     this.form.value.updated_at = this._shared.getCurrentDate();
@@ -196,10 +200,8 @@ export class UsuariosFormComponent implements OnInit {
 
 
   private insertar(){
-    this._userServices.insert(this.form.value).subscribe((res:any)=> {
-      if(this.isSuccess(res)){
-        this.subirFoto(res['id'], res);
-      }
+    let form = this.createForm();
+    this._userServices.insert(form).subscribe((res:any)=> {
       this.handlerSuccess(res);
     },error=>{
       this.handlerError(error);
@@ -208,32 +210,38 @@ export class UsuariosFormComponent implements OnInit {
 
 
   private actualizar(){
-    //let form = this.createFormData();
-    this._userServices.update(this.id, this.form.value).subscribe((res: any)=> {
-      if(this.isSuccess(res)){
-        this.subirFoto(res['id'], res);
-      }
+    let form = this.createForm();
+    this._userServices.update(this.id, form).subscribe((res: any)=> {
       this.handlerSuccess(res);
     },error=>{
       this.handlerError(error);
     });
   }
 
-  private isSuccess(res: any){
-    return (res['status'] !== 'Token is Expired' && !res.errores && res['tipoMensaje'] === "success")
+
+  //genera el objeto FormData que será enviado al backend con datos y archivos adjuntos
+  private createForm():FormData{
+    let form = new FormData();
+    Object.keys(this.form.value).forEach(key => {
+
+      if(key ===  'roles'){
+        //Agregar el array con los roles
+        this.form.get(key)?.value.forEach(
+          (r: any, k: any) => {
+            Object.keys(r).forEach(key =>
+              form.append(`roles[${k}][${key}]`, r[key])
+            )
+          }
+        )
+
+      }else{
+        //Agregando los campos del formulario que no sean un array
+        form.append(key, this.form.value[key])
+      }
+    })
+
+    return form;
   }
-
-
-  private subirFoto(id: number, res: any){
-    if(this.fileToUpload){
-      this._files.uploadFile(<File>this.fileToUpload, 'usuarios/subir/foto').subscribe(() => {},
-      error=>{
-        console.log(error)
-        this.handlerError(error);
-      })
-    }
-  }
-
 
   private eliminar(){
     this.showSpinner = true;
@@ -261,16 +269,14 @@ export class UsuariosFormComponent implements OnInit {
       //this.usuario.foto = this.form.value.foto  //Actualizando el objeto usuario
       //this.usuario.foto = (<File>this.fileToUpload).name;
       //this.form.value.fotoObject = reader.result// as string;
-      this.fotoObject = reader.result as string;
-      this.cargaFotoEnImageControl(this.fotoObject)
-      console.log(this.form.value)
+      this.cargaFotoEnImageControl(reader.result as string)
     }
     reader.readAsDataURL(<File>this.fileToUpload)
   }
 
-  private cargaFotoEnImageControl(object: string = '', url: string = ''){
+  private cargaFotoEnImageControl(object: string | null = null, url: string | null = null){
     let img: HTMLImageElement = <HTMLImageElement>document.getElementById('img-foto')
-    img.src = object ? object : url ? this._const.storageImages + url : this.srcDefault
+    img.src = object ? object : url ? this._const.storageImages + 'avatars/' + url : this._const.srcDefault
   }
 
 
@@ -298,3 +304,7 @@ export class UsuariosFormComponent implements OnInit {
   }
 
 }
+function k(k: any) {
+  throw new Error('Function not implemented.');
+}
+

@@ -4,6 +4,7 @@ export class Menu {
   url!: string;
   menu_padre_id?: number;
   posicion!: number;
+  acceder?: boolean;
   sub_menu?: Menu[];
   created_at!: Date;
   updated_at!: Date;
