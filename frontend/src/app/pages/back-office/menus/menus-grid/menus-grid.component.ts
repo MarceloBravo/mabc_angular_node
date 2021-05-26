@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class MenusGridComponent implements OnInit {
   public showSpinner: boolean = false;
   public mostrarModalEliminar: boolean = false;
-  public headers: string[] = ['Nombre','Url','posición','Fecha creación','Fecha actualización','Acciones'];
+  public headers: string[] = ['Nombre','Url','Posición','Fecha creación','Fecha Actualización'];
   public visibleColumns: string[] = ['nombre','url','posicion','created_at','updated_at'];
   public menus: Menu[] = [];
   public paginacion: Paginacion = new Paginacion();

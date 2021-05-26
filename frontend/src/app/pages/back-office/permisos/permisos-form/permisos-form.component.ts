@@ -55,7 +55,6 @@ export class PermisosFormComponent implements OnInit {
       (res: any)=>{
         this.permisos = res;
         this.showSpinner = false;
-        console.log(this.permisos);
       },error=>{
         this.handlerErrors(error)
       }
@@ -76,7 +75,6 @@ export class PermisosFormComponent implements OnInit {
     this.showSpinner = true;
     this._permisosService.save(this.id, this.permisos).subscribe(
       (res: any)=>{
-        console.log(res);
         if(res.tipoMensaje === 'success'){
           this._toastService.showSuccessMessage(res.mensaje);
         }else{

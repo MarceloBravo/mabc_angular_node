@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ChildActivationStart } from '@angular/router';
+import { ChildActivationStart, Router } from '@angular/router';
+import { PermisosService } from '../../services/permisos/permisos.service';
+import { LoginService } from '../../services/login/login.service';
 
 @Component({
   selector: 'app-grid',
@@ -16,15 +18,35 @@ export class GridComponent implements OnInit {
   @Input() titulo: string = ''
   @Input() urlEditar: string = 'edit';
   @Input() urlNuevo: string = 'nuevo';
-  @Input() mostrarNuevo: boolean = true;
-  @Input() mostrarEditar: boolean = true;
-  @Input() mostrarEliminar: boolean = true;
   @Output() idEliminar: EventEmitter<number> = new EventEmitter();
   @Output() textoFiltro: EventEmitter<string> = new EventEmitter();
+  public mostrarNuevo: boolean = false;
+  public mostrarEditar: boolean = false;
+  public mostrarEliminar: boolean = false;
 
-  constructor() { }
+  constructor(
+    private _permisos: PermisosService,
+    private _login: LoginService,
+    private router: Router
+  ) {
+    this.aplicarPermisos()
+  }
 
   ngOnInit(): void {
+  }
+
+  private aplicarPermisos(){
+    let url = this.router.url.split('/')[2]
+    let roles = this._login.getRolesUsuario()
+    this._permisos.getPermisosPantalla(url, roles.map(r => r.id)).subscribe((res: any) => {
+      res.forEach((p: any) => {
+        if(p.crear)this.mostrarNuevo = true
+        if(p.modificar)this.mostrarEditar = true
+        if(p.eliminar)this.mostrarEliminar = true
+      })
+    },error=>{
+      console.log(error)
+    })
   }
 
   eliminar(id: number){

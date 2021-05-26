@@ -19,7 +19,7 @@ export class UsuariosGridComponent implements OnInit {
   public mostrarModalEliminar: boolean = false;
   public paginacion: Paginacion = new Paginacion();
   public usuarios: User[] = [];
-  public titulos: string[] = ['Nombre','A. Paterno','A. Materno','Email','Dirección','Fecha Creación','Ult. Actualización','Acciones']
+  public titulos: string[] = ['Nombre','A. Paterno','A. Materno','Email','Dirección','Fecha Creación','Ult. Actualización']
   public campos: string[] = ['name','a_paterno','a_materno','email','direccion','created_at','updated_at']
   private idDelete: number = 0;
 

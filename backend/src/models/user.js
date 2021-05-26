@@ -1,6 +1,7 @@
 const connection = require('../../db/connection.js')
 const tools = require('../shared/tools.js')
 const { regPerPage } = require('../shared/constants');
+const rolesUsuario = require('../shared/functions')
 
 let cnn = connection.conect();
 
@@ -92,7 +93,7 @@ userModel.get = (id, callback) => {
     
 }
 
-
+/*
 const rolesUsuario = (idUser) => {
     let qry = `SELECT 
                 r.id, 
@@ -117,7 +118,7 @@ const rolesUsuario = (idUser) => {
         });
     });
 }
-
+*/
 
 userModel.getAll = (callback) => {
     if(cnn){
@@ -375,4 +376,4 @@ const validaDatos = (data, newUser) => {
     return res;
 }
 
-module.exports = [userModel, rolesUsuario];
+module.exports = userModel;

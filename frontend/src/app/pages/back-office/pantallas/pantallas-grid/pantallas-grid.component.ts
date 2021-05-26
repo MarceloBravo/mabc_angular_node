@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class PantallasGridComponent implements OnInit {
   public showSpinner: boolean = false;
   public mostrarModalEliminar: boolean = false;
-  public gridHeaders: string[] = ['Nombre','Menú','Url','Fecha creación','Fecha actualización','Acciones'];
+  public gridHeaders: string[] = ['Nombre','Menú','Url','Fecha creación','Fecha actualización'];
   public visibleColumns: string[] = ['nombre','menu','url','created_at','updated_at'];
   public data: Pantalla[] = [];
   public paginacion: Paginacion  = new Paginacion();
