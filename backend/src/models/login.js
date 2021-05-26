@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 
 const constantes = require('../shared/constants');
+const rolesUsuario = require('../shared/functions')
 
 let cnn = connection.conect();
 
@@ -17,7 +18,7 @@ login.getUserData = async (credentials, callback) => {
             id,
             name,
             email, 
-            password,
+            password, 
             created_at, 
             updated_at, 
             a_paterno, 
@@ -29,7 +30,7 @@ login.getUserData = async (credentials, callback) => {
         WHERE email = ${cnn.escape(credentials.email)}             
             AND deleted_at IS NULL `
         
-        cnn.query(qry, (err, result) => {            
+        cnn.query(qry, async (err, result) => {            
             let row = result[0]
             let access_token = null
             if(err){
@@ -37,13 +38,15 @@ login.getUserData = async (credentials, callback) => {
             }else if(row === undefined){
                 return callback({mensaje: 'Usuario inexistente.', tipo:'danger', id:-1})
             }else{
+                let roles = await rolesUsuario(row.id)
                 bcrypt.compare(credentials.password.toString(), row.password.toString(), (err, res)=>{
                     if(err){
                         return callback(err, {access_token: null, user:null})
                     }else{
-                        console.log('SECRET', constantes.secret);
-                        access_token = jwt.sign({id: result.id}, constantes.secret, {issuer: credentials.host})    //Agregar datos al token: https://www.npmjs.com/package/jsonwebtoken
-                        return callback(null,{access_token, user: row})
+                        delete row.password
+                        console.log('result.id', result.id)
+                        access_token = jwt.sign({user: row, roles}, constantes.secret, {issuer: credentials.host})    //Agregar datos al token: https://www.npmjs.com/package/jsonwebtoken
+                        return callback(null,{access_token, user: row, roles})
                     }
                 })
             }

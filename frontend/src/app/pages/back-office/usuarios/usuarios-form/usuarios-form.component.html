@@ -166,9 +166,13 @@
                 </div>
               </div>
 
-              <button type="submit" class="btn btn-primary" (click)="cancelar()">Cancelar</button>
-              <button type="submit" class="btn btn-danger" (click)="modalEliminar()" [disabled]="id == null">Eliminar</button>
-              <button type="button" class="btn btn-success" (click)="modalGrabar()" [disabled]="!form.valid">Grabar</button>
+              <app-form-button
+              (cancelar$)="cancelar()"
+              (eliminar$)="modalEliminar()"
+              (grabar$)="modalGrabar()"
+              [id]="id"
+              [formInvalid]="form.invalid"
+          ></app-form-button>
             </form>
           </div>
         </div>

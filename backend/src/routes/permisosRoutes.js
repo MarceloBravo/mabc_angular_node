@@ -13,6 +13,18 @@ module.exports = function(app, passport){
         });
     });
 
+
+    app.post('/permisos/pantalla/:url', checkToken, (req, res) => {
+        permisosModel.getPermisosPantalla(req.params.url, req.body, (err, data) => {
+            if(err){
+                res.json(err);
+            }else{
+                res.json(data);
+            }
+        });
+    });
+
+
     app.post('/permisos', checkToken, (req, res) => {
         permisosModel.savePermissions(req.body, (err, data) => {
             if(err){

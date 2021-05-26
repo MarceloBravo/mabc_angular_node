@@ -10,7 +10,6 @@ permisosModel.get = async (idRol, callback) => {
             let qry = `
                     SELECT
                         qry1.id,
-                        -- r.id AS rol_id,
                         qry1.roles_id,
                         pt.id AS pantallas_id,
                         pt.nombre AS pantalla,
@@ -35,14 +34,45 @@ permisosModel.get = async (idRol, callback) => {
                 ORDER BY
                         roles_id,
                         pantallas_id`;
-            console.log(qry);
+                        
             let res = await cnn.promise().query(qry);
 
             return callback(null, res[0]);
         }catch(error){
-            console.log(error)
+            console.log(error.message)
             return callback({mensaje: 'Ocurrió un error al buscar los permisos del rol: '+ error.message, tipoMensaje: 'danger', id: -1});
         }
+    }else{
+        return callback({mensaje: 'Conexión inactiva.', tipoMensaje: 'danger', id:-1});
+    }
+}
+
+permisosModel.getPermisosPantalla = (url, arrRoles, callback) => {
+    if(cnn){
+        let qry = `
+                SELECT
+                    p.acceder,
+                    p.crear,
+                    p.modificar,
+                    p.eliminar 
+                FROM permisos p
+                    INNER JOIN pantallas pt ON p.pantallas_id = pt.id 
+                    INNER JOIN menus m on pt.menus_id = m.id 
+                WHERE m.url = ${cnn.escape(url)} 
+                AND p.roles_id IN (${cnn.escape(arrRoles)})
+                AND p.deleted_at IS NULL
+                AND pt.deleted_at IS NULL
+                AND m.deleted_at IS NULL;
+        `
+
+        cnn.query(qry, (error, res) => {
+            if(error){
+                console.log(error)
+                return callback({mensaje: 'Ocurrió un error al consultar los permisos: '+error.message, tipoMensaje: 'danger', id: -1});
+            }else{
+                return callback(null, res);
+            }
+        })
     }else{
         return callback({mensaje: 'Conexión inactiva.', tipoMensaje: 'danger', id:-1});
     }

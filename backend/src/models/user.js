@@ -375,4 +375,4 @@ const validaDatos = (data, newUser) => {
     return res;
 }
 
-module.exports = userModel;
+module.exports = [userModel, rolesUsuario];

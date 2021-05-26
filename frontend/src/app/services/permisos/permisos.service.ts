@@ -33,4 +33,9 @@ export class PermisosService {
     return this.httpClient.post(`${this._constantes.endPoint}${this.url}`,data,{headers: this._constantes.header()});
   }
 
+
+  getPermisosPantalla(url: string, arrRoles: number[]){
+    return this.httpClient.post(`${this._constantes.endPoint}${this.url}/pantalla/${url}`, arrRoles, {headers: this._constantes.header()});
+  }
+
 }
