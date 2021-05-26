@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ConstantesService } from '../constantes/constantes.service';
 import { User } from 'src/app/class/User/user';
@@ -9,6 +9,7 @@ import { User } from 'src/app/class/User/user';
 export class UsuariosService {
   private url: string = 'usuarios';
   private url_servidor_imagenes: string = ''
+  public avatarActualizado$: EventEmitter<String> = new EventEmitter<String>()
 
   constructor(
     private http: HttpClient,
@@ -36,6 +37,9 @@ export class UsuariosService {
   }
 
   update(id: number, user: FormData){
+    let foto = user.get('foto')
+    let fotoImage = user.get('fotoImage')
+    if(foto && fotoImage)this.avatarActualizado$.emit(<String>foto)
     return this.http.put<object>(`${this._constantes.endPoint}${this.url}/${id}`, user, {headers: this._constantes.headerAttachFile()});
   }
 
