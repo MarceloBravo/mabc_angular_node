@@ -115,7 +115,7 @@ p {
 }
 #login, .logo{
     display:inline-block;
-    width:40%;
+    width:100%;
 }
 #login{
 border-right:1px solid #fff;
@@ -156,7 +156,8 @@ fieldset{
 	color: #000;
 	margin-bottom: 1em;
 	padding: 0 16px;
-	width: 200px;
+	/*width: 200px;*/
+  width: 75% !important;
 }
 
 #login form input[type="submit"] {

@@ -12,6 +12,7 @@ import { MenusFormComponent } from './pages/back-office/menus/menus-form/menus-f
 import { PantallasGridComponent } from './pages/back-office/pantallas/pantallas-grid/pantallas-grid.component';
 import { PantallasFormComponent } from './pages/back-office/pantallas/pantallas-form/pantallas-form.component';
 import { PermisosFormComponent } from './pages/back-office/permisos/permisos-form/permisos-form.component';
+import { PersonalizarComponent } from './pages/back-office/personalizar/personalizar.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -34,6 +35,8 @@ const routes: Routes = [
       { path: 'pantallas/edit/:id', component: PantallasFormComponent },
 
       { path: 'permisos', component: PermisosFormComponent },
+
+      { path: 'personalizar', component: PersonalizarComponent}
     ]
 },
   { path: '**', pathMatch: 'full', redirectTo: 'login' },

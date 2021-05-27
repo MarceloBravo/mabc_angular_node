@@ -28,6 +28,7 @@ import { FormsModule } from '@angular/forms';
 import { SubMenuComponent } from './components/subMenu/sub-menu/sub-menu.component';
 import { ImageUploadModule } from 'angular2-image-upload';
 import { FormButtonComponent } from './components/form-button/form-button.component';
+import { PersonalizarComponent } from './pages/back-office/personalizar/personalizar.component';
 //import { CustomValidatorsComponent } from './validators/custom-validators/custom-validators.component';
 
 @NgModule({
@@ -55,6 +56,7 @@ import { FormButtonComponent } from './components/form-button/form-button.compon
     PermisosFormComponent,
     SubMenuComponent,
     FormButtonComponent,
+    PersonalizarComponent,
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,8 @@ import { ScriptServicesService } from 'src/app/services/scriptServices/script-se
 import { LoginService } from '../../services/login/login.service';
 import { ConstantesService } from '../../services/constantes/constantes.service';
 import { UsuariosService } from '../../services/usuarios/usuarios.service';
+import { Title } from '@angular/platform-browser';
+import { CustomizeService } from '../../services/customize/customize.service';
 
 @Component({
   selector: 'app-header-nabvar',
@@ -28,6 +30,8 @@ export class HeaderNabvarComponent implements OnInit {
     private _usuariosService: UsuariosService,
     private _loginServices: LoginService,
     private _const: ConstantesService,
+    private _config: CustomizeService,
+    private title: Title,
   ) {
     this.cargarAvatar()
   }
@@ -36,6 +40,12 @@ export class HeaderNabvarComponent implements OnInit {
     this.loadScripts()
     this._usuariosService.avatarActualizado$.subscribe((urlFoto: string) => {
       this.avatarImage = this._const.storageImages + 'avatars/' + urlFoto
+    })
+
+    this._config.getData().subscribe((res: any) => {
+      this.title.setTitle(res.nombre_app)
+    },error => {
+      console.log(error)
     })
   }
 

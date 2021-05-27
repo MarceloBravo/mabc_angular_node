@@ -234,8 +234,6 @@ menusModel.getAll = (callback) => {
 
 menusModel.insert = (data, callback) => {
     if(cnn){
-        let createdAt = todayToString();
-        let updatedAt = createdAt;
 
         let qry = `
             INSERT INTO menus (
@@ -250,8 +248,8 @@ menusModel.insert = (data, callback) => {
                 ${cnn.escape(data.url)},
                 ${cnn.escape(data.menu_padre_id)},
                 ${cnn.escape(data.posicion)},
-                '${createdAt}',
-                '${updatedAt}'
+                CURDATE(),
+                CURDATE()
             )
         `;
 
@@ -275,7 +273,6 @@ menusModel.insert = (data, callback) => {
 
 menusModel.update = (id, data, callback) => {
     if(cnn){
-        let updatedAt = todayToString();
 
         let qry = `
             UPDATE menus SET 
@@ -283,7 +280,7 @@ menusModel.update = (id, data, callback) => {
                 url = ${cnn.escape(data.url)},
                 menu_padre_id = ${cnn.escape(data.menu_padre_id)},
                 posicion = ${cnn.escape(data.posicion)},
-                updated_at = '${updatedAt}' 
+                updated_at = CURDATE() 
             WHERE id = ${cnn.escape(id)}
         `;
 
@@ -306,7 +303,7 @@ menusModel.softDelete = (id, callback) => {
         let deletedAt = todayToString();
         let qry = `
             UPDATE menus SET 
-                deleted_at = '${deletedAt}' 
+                deleted_at = CURDATE()  
             WHERE id = ${cnn.escape(id)}
         `;
 

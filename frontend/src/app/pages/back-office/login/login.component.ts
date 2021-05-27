@@ -1,13 +1,11 @@
-import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Login } from 'src/app/class/login/login';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LoginService } from 'src/app/services/login/login.service';
-import { SharedService } from '../../../services/shared/shared.service';
 import { ScriptServicesService } from '../../../services/scriptServices/script-services.service';
 import { ToastService } from '../../../services/toast/toast.service';
-import { User } from 'src/app/class/User/user';
+import { CustomizeService } from '../../../services/customize/customize.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -23,14 +21,16 @@ export class LoginComponent implements OnInit {
     remember: new FormControl()
   })
   public showToast: boolean = false
+  public nombreApp: string = ''
 
   constructor(
     private _loginService: LoginService,
-    private _shared: SharedService,
     private fb: FormBuilder,
     private router: Router,
+    private title: Title,
     private _scriptService: ScriptServicesService,
-    private toastService: ToastService
+    private _toastService: ToastService,
+    private _config: CustomizeService
   ) {
     this._scriptService.load([
       '//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js',
@@ -39,9 +39,17 @@ export class LoginComponent implements OnInit {
       '//code.jquery.com/jquery-1.11.1.min.js'
       ]);
     this.initForm();
+
    }
 
   ngOnInit(): void {
+    this._config.getData().subscribe((res: any)=> {
+      this.nombreApp = res.nombre_app
+      this.title.setTitle(res.nombre_app)
+    }, error => {
+      console.log(error)
+      this._toastService.showErrorMessage(error.message)
+    });
   }
 
   private initForm(){
@@ -62,13 +70,13 @@ export class LoginComponent implements OnInit {
             this._loginService.setRolesUsuario(res['roles']);
             this.router.navigate(['/admin']);
           }
-          this.toastService.clearToast();
+          this._toastService.clearToast();
         } else{
           this.showToast = true;
         }
     },error=>{
       console.log(error)
-      this.toastService.showErrorMessage(error.status !== 401 ? error.message : 'Usuario y/o contraseña no validos', 'Error!!')
+      this._toastService.showErrorMessage(error.status !== 401 ? error.message : 'Usuario y/o contraseña no validos', 'Error!!')
 
     });
   }
