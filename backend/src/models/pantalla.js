@@ -1,6 +1,5 @@
 const connection = require('../../db/connection');
 const constantes = require('../shared/constants');
-const todayToString = require('../shared/functions');
 
 let cnn = connection.conect();
 
@@ -8,7 +7,6 @@ let pantallaModel = {}
 
 pantallaModel.getPage = (pag, callback) => {
     if(cnn){
-        console.log()
         let desde = constantes.regPerPage * pag;
         let hasta = desde + constantes.regPerPage;
         let qry = `
@@ -163,7 +161,6 @@ pantallaModel.filter = (texto, pag, callback) => {
 
 pantallaModel.insert = (data, callback) => {
     if(cnn){
-        let fecha = todayToString();
         let qry = `
             INSERT INTO pantallas (
                 nombre,
@@ -175,8 +172,8 @@ pantallaModel.insert = (data, callback) => {
                 permite_eliminar
             ) VALUES (
                 ${cnn.escape(data.nombre)},
-                '${fecha}',
-                '${fecha}',
+                CURDATE(),
+                CURDATE(),
                 ${cnn.escape(data.menus_id)},
                 ${cnn.escape(data.permite_crear)},
                 ${cnn.escape(data.permite_modificar)},
@@ -200,11 +197,10 @@ pantallaModel.insert = (data, callback) => {
 
 pantallaModel.update = (id, data, callback) => {
     if(cnn){
-        let fecha = todayToString();
         let qry = `
             UPDATE pantallas SET
                 nombre = ${cnn.escape(data.nombre)},
-                updated_at = '${fecha}',
+                updated_at = CURDATE(),
                 menus_id = ${cnn.escape(data.menus_id)},
                 permite_crear = ${cnn.escape(data.permite_crear)},
                 permite_modificar = ${cnn.escape(data.permite_modificar)},
@@ -228,10 +224,9 @@ pantallaModel.update = (id, data, callback) => {
 
 pantallaModel.sofDelete = (id, callback) => {
     if(cnn){
-        let fecha = todayToString();
         let qry = `
             UPDATE pantallas SET
-                deleted_at = '${fecha}' 
+                deleted_at = 'CURDATE()  
             WHERE 
                 id = ${cnn.escape(id)}
         `;

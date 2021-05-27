@@ -1,0 +1,55 @@
+<div class="row">
+  <app-spinner [mostrarSpinner]="showSpinner"></app-spinner>
+  <app-toasts></app-toasts>
+  <app-modal-dialog
+    [mostrar]="mostrarModal"
+    [titulo]="tituloModal"
+    [mensaje]="mensajeModal"
+    (aceptar)="aceptarModal()"
+    (cerrar)="cerrarModal()"
+  ></app-modal-dialog>
+
+  <h1 class="h3 mb-3">Personalizar</h1>
+
+  <div class="row">
+    <div class="col-12 col-xl-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Personalizar aplicación</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form">
+
+
+            <div class="form-group row">
+              <label for="nombre_app" class="form-label col-md-2">Nombre app</label>
+              <div class="col-md-3">
+                <input
+                  type="text"
+                  class="form-control col-md-12"
+                  formControlName="nombre_app"
+                  placeholder="Nombre de la app"
+                  max="15"
+                />
+              </div>
+            </div>
+            <div *ngIf="form.get('nombre_app')?.hasError('required') && form.get('nombre_app')?.dirty" class="error-input">
+              El nombre de la aplicación es obligatorio.
+            </div>
+            <div *ngIf="form.get('nombre_app')?.hasError('minlength') && form.get('nombre_app')?.dirty" class="error-input">
+              El nombre de la aplicación debe tener un mínimo de 3 carácteres. Ingresa un nombre más largo.
+            </div>
+            <div *ngIf="form.get('nombre_app')?.hasError('maxlength') && form.get('nombre_app')?.dirty" class="error-input">
+              El nombre de la aplicación debe tener un máximo de 15 carácteres. Ingresa un nombre más corto.
+            </div>
+
+            <app-form-button
+              (grabar$)="grabar()"
+              (cancelar$)="cancelar()"
+            ></app-form-button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
