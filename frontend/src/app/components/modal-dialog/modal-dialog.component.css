@@ -5,3 +5,8 @@
 .modal-dialog{
   z-index: 10000;
 }
+
+.fade{
+  position: absolute;
+  width: 59%;
+}

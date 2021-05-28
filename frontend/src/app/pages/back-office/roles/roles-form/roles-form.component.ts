@@ -116,10 +116,10 @@ export class RolesFormComponent implements OnInit {
 
 
   cancelarModal(e: any){
+    this.mostrarModal = false;
     if(this.tipoModal === 'confirmar cambios'){
       this.router.navigate(['/admin/roles'])
     }
-    this.mostrarModal = false;
     this.messageDialog = '';
     this.tipoModal = '';
   }
