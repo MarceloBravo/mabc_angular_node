@@ -21,7 +21,6 @@ export class ModalDialogComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-
     this.mostrarChange(changes.mostrar.currentValue);
 
 }

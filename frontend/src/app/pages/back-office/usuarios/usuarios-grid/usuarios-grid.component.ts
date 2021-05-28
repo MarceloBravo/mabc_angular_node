@@ -64,7 +64,7 @@ export class UsuariosGridComponent implements OnInit {
 
 
   cancelarEliminar(e: any){
-    this.mostrarModalEliminar = e;
+    this.mostrarModalEliminar = false;
   }
 
   eliminar(id: number){

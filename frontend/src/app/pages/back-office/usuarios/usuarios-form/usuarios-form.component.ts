@@ -143,10 +143,10 @@ export class UsuariosFormComponent implements OnInit {
 
 
   cancelarModal(e: any){
+    this.mostrarModal = false;
     if(this.tipoModal === 'confirmar cambios'){
       this.router.navigate(['/admin/usuarios'])
     }
-    this.mostrarModal = false;
     this.tipoModal = '';
     this.messageDialog = '';
   }

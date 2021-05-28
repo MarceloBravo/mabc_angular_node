@@ -40,8 +40,9 @@ login.getUserData = async (credentials, callback) => {
             }else{
                 let roles = await rolesUsuario(row.id)
                 bcrypt.compare(credentials.password.toString(), row.password.toString(), (err, res)=>{
-                    if(err){
-                        return callback(err, {access_token: null, user:null})
+                    console.log('LOGIN',err, res)
+                    if(err || !res){
+                        return callback(err ? err.message : {mensaje: 'Usuario y/o contraseña no válidos.',tipoMensaje:'danger', id:-1}, {access_token: null, user:null})
                     }else{
                         delete row.password
                         console.log('result.id', result.id)
