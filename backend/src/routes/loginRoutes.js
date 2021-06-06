@@ -9,6 +9,21 @@ module.exports = function(app, passport){
             }else{
                 res.status(200).json(data);
             }
-        })
-    })
+        });
+    });
+
+
+    app.post('/logout', (req, res) => {
+        const bearerHeader = req.headers['authorization'];
+        console.log(bearerHeader)
+        /*
+        login.logout((err, data) => {
+            if(err){
+                res.json(err)
+            }else{
+                res.json(data)
+            }
+        });
+        */
+    });
 }

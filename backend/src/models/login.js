@@ -10,6 +10,7 @@ let cnn = connection.conect();
 
 let login = {}
 
+
 login.getUserData = async (credentials, callback) => {
 
     if(cnn){
@@ -40,12 +41,12 @@ login.getUserData = async (credentials, callback) => {
             }else{
                 let roles = await rolesUsuario(row.id)
                 bcrypt.compare(credentials.password.toString(), row.password.toString(), (err, res)=>{
-                    console.log('LOGIN',err, res)
+                    //console.log('LOGIN',err, res)
                     if(err || !res){
                         return callback(err ? err.message : {mensaje: 'Usuario y/o contraseña no válidos.',tipoMensaje:'danger', id:-1}, {access_token: null, user:null})
                     }else{
                         delete row.password
-                        console.log('result.id', result.id)
+                        //console.log('result.id', result.id)
                         access_token = jwt.sign({user: row, roles}, constantes.secret, {issuer: credentials.host})    //Agregar datos al token: https://www.npmjs.com/package/jsonwebtoken
                         return callback(null,{access_token, user: row, roles})
                     }
@@ -57,5 +58,14 @@ login.getUserData = async (credentials, callback) => {
         return callback({mensaje: 'Conexión inactiva.', tipoMensage: 'danger', id:-1})
     }
 }
+
+
+login.logout = (req, res, callback) => {
+    if(req.session.user){
+        req.session.user = null
+    }
+    callback(null, {mensaje: 'La sessión ha finalizado.', tipo: 'success'})
+}
+
 
 module.exports = login

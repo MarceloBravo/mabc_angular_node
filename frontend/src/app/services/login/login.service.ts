@@ -6,6 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { ConstantesService } from '../constantes/constantes.service';
 import { User } from 'src/app/class/User/user';
 import { Rol } from 'src/app/class/rol/rol';
+import { Subject } from 'rxjs';
 
 
 @Injectable({
@@ -25,7 +26,7 @@ export class LoginService {
   ) { }
 
   login(loginForm: FormGroup){
-    console.log(loginForm.value)
+    //console.log(loginForm.value)
     let remember: boolean = <boolean><unknown>loginForm.value['remember'];
     this._sharedServices.globalRememberUser = remember;
     return this.httpClient.post(this._constantes.endPoint + this.endPoint, loginForm.value, {headers: this.header});
@@ -51,12 +52,16 @@ export class LoginService {
   }
 
   logOut(){
-    let token: any = this._tokenService.getToken();
-    return this.httpClient.post(
+    sessionStorage.removeItem('roles')
+    sessionStorage.removeItem('user')
+    sessionStorage.removeItem('mabc-token')
+    //let token: any = this._tokenService.getToken();
+    /*return this.httpClient.post(
             `${this._constantes.endPoint}${this.endPoint}/logout`,
             {},
             {headers: this._constantes.header(<string><unknown>token)}
           );
+    */
   }
 
   refreshToken(){
@@ -86,5 +91,8 @@ export class LoginService {
   getRolesUsuario(): Rol[]{
     let strRoles = sessionStorage.getItem('roles')
     return strRoles ? JSON.parse(strRoles) : []
+  }
+  private clearCredentials(){
+
   }
 }
