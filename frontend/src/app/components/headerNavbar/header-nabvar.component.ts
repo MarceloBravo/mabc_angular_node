@@ -6,6 +6,7 @@ import { ConstantesService } from '../../services/constantes/constantes.service'
 import { UsuariosService } from '../../services/usuarios/usuarios.service';
 import { Title } from '@angular/platform-browser';
 import { CustomizeService } from '../../services/customize/customize.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header-nabvar',
@@ -32,6 +33,7 @@ export class HeaderNabvarComponent implements OnInit {
     private _const: ConstantesService,
     private _config: CustomizeService,
     private title: Title,
+    private router: Router,
   ) {
     this.cargarAvatar()
   }
@@ -68,5 +70,11 @@ export class HeaderNabvarComponent implements OnInit {
   public showHideLeftMenu(){
     this.leftMenuIsVisible = !this.leftMenuIsVisible
     this.showLeftMenu.emit(this.leftMenuIsVisible)
+  }
+
+  logout(){
+    this._loginServices.logOut()
+    this.router.navigate(['/'])
+    console.log('logOut');
   }
 }
